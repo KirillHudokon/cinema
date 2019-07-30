@@ -1,5 +1,5 @@
 import React from 'react';
-import LogOut from './Auto/LogOut'
+import LogOut from './Auth/LogOut'
 import {connect} from 'react-redux'
 import {logout} from "../actions/UserAction";
 class  Home extends React.Component{

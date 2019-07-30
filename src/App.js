@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from './components/Auto/Form'
+import Form from './components/Auth/Form'
 import Home from './components/Home'
 import {connect} from 'react-redux'
 import fire from './config/Fire'
