@@ -1,17 +1,30 @@
 import React from 'react';
-import Login from './components/Login'
+import Form from './components/Auto/Form'
+import Home from './components/Home'
 import {connect} from 'react-redux'
-import handleLogin from './actions/UserAction'
+import fire from './config/Fire'
 class App extends React.Component{
+    componentDidMount(){
+         this.onAuthState()
+    }
+    state={
+        user:{}
+    }
+    onAuthState=()=>{
+        const self=this
+         fire.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                self.setState({user})
+            } else {
+                self.setState({user : null})
+            }
+        });
+    }
     render(){
-        console.log(this.props)
-        const {user,handleLoginAction} = this.props
+       // console.log('daunsergeich@gmail.com', 'Ab712712s')
         return (
             <div className="App">
-              <Login handleLogin={handleLoginAction}/>
-                <div>
-                    {user.name}
-                </div>
+                {this.state.user ? <Home/> : <Form/> }
             </div>
         );
     }
@@ -19,7 +32,5 @@ class App extends React.Component{
 export const mapStateToProps = store =>({
     user: store.user
 })
-export const mapDispatchToProps = dispatch =>({
-    handleLoginAction: ()=>dispatch(handleLogin())
-})
+export const mapDispatchToProps = null
 export default connect(mapStateToProps,mapDispatchToProps)(App);

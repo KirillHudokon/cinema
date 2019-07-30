@@ -1,3 +1,5 @@
+import fire from "../config/Fire";
+
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAIL = 'LOGIN_FAIL'
@@ -15,8 +17,42 @@ const onLogError=(error)=>({
     error: true,
     payload: error,
 })
-export default function handleLogin() {
-    return dispatch =>{
-        dispatch(onLogSuccess('kirill'))
+
+export const login = (email,password)=>{
+    return dispatch => {
+        dispatch(onLogRequest())
+        fire.auth()
+            .signInWithEmailAndPassword(email, password)
+            .then( (u) => {
+                const {user} = u
+                 dispatch(onLogSuccess(user.email))
+            })
+            .catch((error) => {
+                dispatch(onLogError(error))
+            });
+    }
+}
+export const signUp = (email,password)=>{
+    return  dispatch => {
+        dispatch(onLogRequest())
+         fire.auth()
+        .createUserWithEmailAndPassword( email,password )
+        .then((u)=>{
+            const {user} = u
+            dispatch(onLogSuccess(user.email))
+        })
+        .catch((error)=> {
+            dispatch(onLogError(error))
+        });
+    }
+}
+export const logout=()=>{
+    return dispatch => {
+        dispatch(onLogRequest())
+        fire.auth().signOut().then(() => {
+            dispatch(onLogSuccess('unknown'))
+        }).catch((error)=> {
+            dispatch(onLogError(error))
+        });
     }
 }
