@@ -4,8 +4,8 @@ import Home from './components/Home'
 import {connect} from 'react-redux'
 import fire from './config/Fire'
 class App extends React.Component{
-    componentDidMount(){
-         this.onAuthState()
+   async componentDidMount(){
+        await this.onAuthState()
     }
     state={
         user:{}
