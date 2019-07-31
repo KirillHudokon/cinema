@@ -19,27 +19,49 @@ const onLogError=(error)=>({
 })
 
 export const login = (email,password)=>{
+    let user=null
     return dispatch => {
         dispatch(onLogRequest())
         fire.auth()
             .signInWithEmailAndPassword(email, password)
-            .then( (u) => {
-                const {user} = u
-                 dispatch(onLogSuccess(user.email))
+            .then(()=>{
+                user = fire.auth().currentUser;
+            })
+            .then(()=> {
+                console.log(user.displayName)
+                dispatch(onLogSuccess(user.displayName))
             })
             .catch((error) => {
                 dispatch(onLogError(error))
             });
     }
 }
-export const signUp = (email,password)=>{
+export const signUp = (email,password,name)=>{
+    let user=null
     return  dispatch => {
         dispatch(onLogRequest())
          fire.auth()
         .createUserWithEmailAndPassword( email,password )
-        .then((u)=>{
-            const {user} = u
-            dispatch(onLogSuccess(user.email))
+        .then(()=>{
+            user = fire.auth().currentUser;
+        })
+        .then(()=> {
+            user.updateProfile({
+                displayName: name
+            }).then(()=>{
+                console.log(user.uid)
+                dispatch(onLogSuccess(name))
+            }).then(()=>{
+                fire
+                    .firestore()
+                    .collection('users')
+                    .doc(user.uid)
+                    .update({
+                        displayName: name,
+                    });
+            }).catch((error)=> {
+                dispatch(onLogError(error))
+            });
         })
         .catch((error)=> {
             dispatch(onLogError(error))

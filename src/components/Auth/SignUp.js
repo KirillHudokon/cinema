@@ -2,12 +2,12 @@ import React from 'react';
 class SignUp extends React.Component{
     handleClick=(e)=>{
         e.preventDefault()
-        const {email,password,signUp}=this.props
-        signUp(email,password)
+        const {email,password,name,signUp}=this.props
+        signUp(email,password,name)
     }
     render(){
         return (
-            <button onClick={this.handleClick}>SignUp</button>
+            <button className="btn_sign_up" onClick={this.handleClick}>SignUp</button>
         );
     }
 }
