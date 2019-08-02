@@ -72,7 +72,7 @@ export const logout=()=>{
     return dispatch => {
         dispatch(onLogRequest())
         fire.auth().signOut().then(() => {
-            dispatch(onLogSuccess('unknown'))
+            dispatch(onLogSuccess(null))
         }).catch((error)=> {
             dispatch(onLogError(error))
         });

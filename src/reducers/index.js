@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux'
 import {userReducer} from './user'
-import {roomReducer} from "./room";
+import {holesReducer} from "./hole";
 export const rootReducer = combineReducers({
     user:userReducer,
-    room:roomReducer
+    holes:holesReducer
 })

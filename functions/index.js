@@ -19,3 +19,4 @@ exports.createUser = functions.auth.user().onCreate((userRecord) => {
         llalalal:50
     });
 });
+
