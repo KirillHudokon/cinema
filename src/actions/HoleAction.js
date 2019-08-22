@@ -3,10 +3,22 @@ import fire from "../config/Fire";
 export const HOLE_REQUEST = 'HOLE_REQUEST'
 export const HOLE_SUCCESS = 'HOLE_SUCCESS'
 export const HOLE_FAIL = 'HOLE_FAIL'
+
 export const BLOCK_PLACES_REQUEST = 'BLOCK_PLACES_REQUEST'
 export const BLOCK_PLACES_SUCCESS = 'BLOCK_PLACES_SUCCESS'
 export const BLOCK_PLACES_FAIL = 'BLOCK_PLACES_FAIL'
 
+export const BLOCK_QUEUE_SUCCESS='BLOCK_QUEUE_SUCCESS'
+
+export const USER_BLOCK_PLACES_SUCCESS = 'USER_BLOCK_PLACES_SUCCESS'
+
+export const GET_USER_BLOCK_PLACES_REQUEST = 'GET_USER_BLOCK_PLACES_REQUEST'
+export const GET_USER_BLOCK_PLACES_SUCCESS = 'GET_USER_BLOCK_PLACES_SUCCESS'
+export const GET_USER_BLOCK_PLACES_FAIL = 'GET_USER_BLOCK_PLACES_FAIL'
+
+export const UPDATE_USER_BLOCK_PLACES_REQUEST = 'UPDATE_USER_BLOCK_PLACES_REQUEST'
+export const UPDATE_USER_BLOCK_PLACES_SUCCESS = 'UPDATE_USER_BLOCK_PLACES_SUCCESS'
+export const UPDATE_USER_BLOCK_PLACES_FAIL = 'UPDATE_USER_BLOCK_PLACES_FAIL'
 const onHoleRequest = () => ({
     type: HOLE_REQUEST,
 })
@@ -34,6 +46,42 @@ const onBlockPlacesError=(error)=>({
     payload: error,
 })
 
+const onBlockQueueSuccess=(queue)=>({
+    type: BLOCK_QUEUE_SUCCESS,
+    payload: queue,
+})
+
+const onBlockUserQueueSuccess=(block)=>({
+    type: USER_BLOCK_PLACES_SUCCESS,
+    payload: block,
+})
+
+const onGetUserBlockPlacesRequest=()=>({
+    type:GET_USER_BLOCK_PLACES_REQUEST
+})
+const onGetUserBlockPlacesSuccess=(blocks)=>({
+    type: GET_USER_BLOCK_PLACES_SUCCESS,
+    payload:blocks
+})
+const onGetUserBlockPlacesError=(error)=>({
+    type: GET_USER_BLOCK_PLACES_FAIL,
+    error: true,
+    payload: error,
+})
+
+const onUpdateUserBlockPlacesRequest=()=>({
+    type:UPDATE_USER_BLOCK_PLACES_REQUEST
+})
+const onUpdateUserBlockPlacesSuccess=(blocks)=>({
+    type: UPDATE_USER_BLOCK_PLACES_SUCCESS,
+    payload:blocks
+})
+const onUpdateUserBlockPlacesError=(error)=>({
+    type: UPDATE_USER_BLOCK_PLACES_FAIL,
+    error: true,
+    payload: error,
+})
+
 
 export const getHoles = ()=>{
     return dispatch => {
@@ -46,15 +94,84 @@ export const getHoles = ()=>{
     }
 }
 
-export const blockPlaces =(hole,block)=>{
+export const blockPlaces =(queue)=>{
     return dispatch => {
-        dispatch(onBlockPlacesRequest)
-        fire.firestore().collection('hole').doc('holes').update({
-            [hole]: block
+        dispatch(onBlockPlacesRequest())
+        fire.firestore().collection('hole').doc('holes').set({
+            ...queue
+        }).then(()=>{
+            fire.firestore().collection('hole').doc('holes').get().then((snap)=> {
+                dispatch(onHoleSuccess(snap.data()))
+            })
         }).then(()=> {
-            dispatch(onBlockPlacesSuccess)
+            dispatch(onBlockPlacesSuccess())
         }).catch((error) => {
             dispatch(onBlockPlacesError(error))
+        });
+    }
+}
+export const blockQueue = (queue,film,i,state) =>{
+    console.log(queue,queue[film],film,i,state)
+    return dispatch =>{
+        const newStatusLocked=[...queue[film].slice(0,i),{status:'locked'},...queue[film].slice(i+1)]
+        const newStatusUnlocked=[...queue[film].slice(0,i),{status:'unlocked'},...queue[film].slice(i+1)]
+        if(state==='prelocked') {
+            dispatch(onBlockQueueSuccess({
+                ...queue,
+                [film]: newStatusLocked
+            }))
+        }else{
+            dispatch(onBlockQueueSuccess({
+                ...queue,
+                [film]: newStatusUnlocked
+            }))
+        }
+    }
+}
+
+export const userBlockQueue = (userQueue,film,index,state) =>{
+    return dispatch =>{
+        let newStatusLocked=[...userQueue, {[film]:index+1}]
+        let newStatusUnlocked=[]
+        if(state==='prelocked') {
+            dispatch(onBlockUserQueueSuccess([
+                ...newStatusLocked
+            ]))
+        }else{
+            let flag=null;
+            userQueue.forEach((key,i)=>{
+                if(key[film]===index+1){
+                    flag=i
+                }
+            })
+
+            newStatusUnlocked=[...userQueue.slice(0,flag),...userQueue.slice(flag+1)]
+            dispatch(onBlockUserQueueSuccess([
+                ...newStatusUnlocked
+            ]))
+        }
+    }
+}
+export const getUserBlockPlaces=(uid)=>{
+    return dispatch => {
+        dispatch(onGetUserBlockPlacesRequest())
+        fire.firestore().collection('users').doc(uid).get().then((snap)=> {
+            console.log(snap.data().booked)
+            dispatch(onGetUserBlockPlacesSuccess(snap.data().booked))
+        }).catch((error) => {
+            dispatch(onGetUserBlockPlacesError(error))
+        });
+    }
+}
+export const updateUserBlockPlaces=(uid,userQueue)=>{
+    return dispatch => {
+        dispatch(onUpdateUserBlockPlacesRequest())
+        fire.firestore().collection('users').doc(uid).update({
+            booked:userQueue
+        }).then(()=>{
+            dispatch(onUpdateUserBlockPlacesSuccess(userQueue))
+        }).catch((error) => {
+            dispatch(onGetUserBlockPlacesError(error))
         });
     }
 }

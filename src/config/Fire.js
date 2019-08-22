@@ -1,4 +1,6 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+import 'firebase/auth'
 var firebaseConfig = {
     apiKey: "AIzaSyDRt7Id35t2bH_KmWBGVkbfz9LqtL6oklY",
     authDomain: "cinema-f66f3.firebaseapp.com",

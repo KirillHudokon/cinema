@@ -1,18 +1,53 @@
 import React from 'react';
 import LogOut from '../components/Auth/LogOut'
 import {connect} from 'react-redux'
-import {logout} from "../actions/UserAction";
-import {getHoles} from "../actions/HoleAction";
-import Holes from '../components/Holes'
-import {blockPlaces} from "../actions/HoleAction";
+import {logout,} from "../actions/UserAction";
+import {getUserBlockPlaces} from "../actions/HoleAction";
+import Holes from './Holes'
+import AccountImage from "../components/account/AccountImage";
+import Form from './Form'
 class  Home extends React.Component{
-     componentDidMount(){
-         this.props.getHolesAction()
+    componentDidMount(){
+        const {user,getUserBlockPlacesAction} = this.props
+        if(user.cred) {
+            console.log(user.cred.uid)
+            getUserBlockPlacesAction(user.cred.uid)
+        }
+    }
+    state={
+        visible:false
+    }
+    handleClicker=()=>{
+        this.setState({visible:!this.state.visible})
+    }
+    renderHeaderAuthInfo=()=>{
+        const {user,logOutAction}=this.props
+        const {displayName}=user.cred
+            return  <div className='prof'>
+                 <div className='image'>
+                     {displayName &&   <AccountImage name={user.cred.displayName}/>}
+                 </div>
+                 <div className='userName'>
+                     {displayName && <p> Hi, {user.cred.displayName}!</p>}
+                 </div>
+                 <div className='logOutBlock'>
+                     <LogOut logout={logOutAction}/>
+                 </div>
+             </div>
+
+    }
+    renderHeaderWithOutInfo=()=>{
+        return <div className='prof'>
+            <div className='logOutBlock'>
+                <button className='butLogin' onClick={this.handleClicker}>Login</button>
+                {this.state.visible && <Form/>}
+            </div>
+
+        </div>
     }
     render(){
-        const{user,holes,logOutAction,blockPlacesAction}=this.props
-        console.log(holes)
-        const {rooms}= holes
+        const {user}=this.props
+        let HeaderInfo= user.cred ? this.renderHeaderAuthInfo() : this.renderHeaderWithOutInfo()
         return (
             <div>
                 <header className='header'>
@@ -20,18 +55,11 @@ class  Home extends React.Component{
                         <div className='logo'>
                             React Cinema
                         </div>
-                        <div className='prof'>
-                            <div className='userName'>
-                                Hi, {user.name}!
-                            </div>
-                            <div className='logOutBlock'>
-                                <LogOut logout={logOutAction}/>
-                            </div>
-                        </div>
+                        { HeaderInfo }
                     </div>
                 </header>
                 <main>
-                    <Holes blockPlaces={blockPlacesAction} rooms={rooms}/>
+                    <Holes/>
                 </main>
             </div>
         );
@@ -40,11 +68,9 @@ class  Home extends React.Component{
 
 export const mapStateToProps = store =>({
     user: store.user,
-    holes:store.holes
 })
 export const mapDispatchToProps = dispatch =>({
     logOutAction: ()=>dispatch(logout()),
-    getHolesAction:()=>dispatch(getHoles()),
-    blockPlacesAction:(hole,block)=>dispatch(blockPlaces(hole,block))
+    getUserBlockPlacesAction: (uid)=>dispatch(getUserBlockPlaces(uid))
 })
 export default connect(mapStateToProps,mapDispatchToProps)(Home);
