@@ -10,7 +10,6 @@ class  Home extends React.Component{
     componentDidMount(){
         const {user,getUserBlockPlacesAction} = this.props
         if(user.cred) {
-            console.log(user.cred.uid)
             getUserBlockPlacesAction(user.cred.uid)
         }
     }

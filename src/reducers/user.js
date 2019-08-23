@@ -11,7 +11,7 @@ import {
     USER_LISTENER_FAIL,
     USER_LISTENER_REQUEST,
     USER_LISTENER_SUCCESS_AUTH,
-    USER_LISTENER_UNSUCCESS_AUTH
+    USER_LISTENER_UNSUCCESS_AUTH,
 } from '../actions/UserAction'
 const initialState = {
     cred: null,
@@ -48,6 +48,7 @@ export function userReducer(state=initialState, action) {
             return { ...state, loading:false, error: action.payload }
         case USER_LISTENER_FAIL:
             return { ...state, loading:false,  error: action.payload }
+
 
         default:
             return state

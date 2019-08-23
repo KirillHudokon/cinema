@@ -19,6 +19,9 @@ export const GET_USER_BLOCK_PLACES_FAIL = 'GET_USER_BLOCK_PLACES_FAIL'
 export const UPDATE_USER_BLOCK_PLACES_REQUEST = 'UPDATE_USER_BLOCK_PLACES_REQUEST'
 export const UPDATE_USER_BLOCK_PLACES_SUCCESS = 'UPDATE_USER_BLOCK_PLACES_SUCCESS'
 export const UPDATE_USER_BLOCK_PLACES_FAIL = 'UPDATE_USER_BLOCK_PLACES_FAIL'
+
+export const RESET_USER_BLOCK_PLACES = 'RESET_USER_BLOCK_PLACES'
+
 const onHoleRequest = () => ({
     type: HOLE_REQUEST,
 })
@@ -82,7 +85,9 @@ const onUpdateUserBlockPlacesError=(error)=>({
     payload: error,
 })
 
-
+export const resetUserBlockPlaces=()=>({
+    type:RESET_USER_BLOCK_PLACES
+})
 export const getHoles = ()=>{
     return dispatch => {
         dispatch(onHoleRequest())
@@ -156,7 +161,6 @@ export const getUserBlockPlaces=(uid)=>{
     return dispatch => {
         dispatch(onGetUserBlockPlacesRequest())
         fire.firestore().collection('users').doc(uid).get().then((snap)=> {
-            console.log(snap.data().booked)
             dispatch(onGetUserBlockPlacesSuccess(snap.data().booked))
         }).catch((error) => {
             dispatch(onGetUserBlockPlacesError(error))

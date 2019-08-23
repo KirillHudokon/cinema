@@ -6,7 +6,6 @@ import UserBookedPlaces from "./UserBookedPlaces";
 class Places extends React.Component{
     renderCinemaPlaces=()=>{
         const {queue,rooms,blockQueueAction,userBlockQueueAction,userQueue}=this.props
-        console.log(userQueue)
         return Object.keys(rooms).length ?
             Object.keys(rooms).map((keyName)=> {
             return <div className='placeBlock' key={keyName}>
@@ -33,8 +32,8 @@ class Places extends React.Component{
     }
 
     render(){
+        console.log(this.props)
         const {user,userBooked}=this.props
-        console.log(userBooked)
         const userBooks=userBooked ? <UserBookedPlaces places={userBooked}/> : null
         const reserve= user.cred ?
                        <button className='btn_prin' onClick={this.blockPlace}>Book places</button>:
