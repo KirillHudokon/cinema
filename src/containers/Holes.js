@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {getHoles} from "../actions/HoleAction";
 import Places from "../components/Holes/Places";
 
+
 class Holes extends React.Component{
     componentDidMount(){
         this.props.getHolesAction()

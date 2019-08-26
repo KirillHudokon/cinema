@@ -10,17 +10,19 @@ class Places extends React.Component{
             Object.keys(rooms).map((keyName)=> {
             return <div className='placeBlock' key={keyName}>
                 <h2 className='nameOfHole'>{keyName}</h2>
-                <div className='placeContainer'>
-                    <CinemaLines
+                    <div className='screen'>Экран</div>
+                    <div className='line'>
+                       <CinemaLines
                         userQueue={userQueue}
                         queue={queue}
                         blockQueue={blockQueueAction}
                         rooms={rooms}
                         film={keyName}
                         userBlockQueue={userBlockQueueAction}
-                    />
+                      />
+                    </div>
                 </div>
-            </div>
+
         }): null
     }
     blockPlace=()=>{
@@ -39,10 +41,12 @@ class Places extends React.Component{
                        <button className='btn_prin' onClick={this.blockPlace}>Book places</button>:
                        <p>Войдите чтобы Забронировать</p>
         return (
-            <div>
+            <div className='placeContainer'>
                 {userBooks}
-                {this.renderCinemaPlaces()}
-                {reserve}
+                <div className='films'>
+                    {this.renderCinemaPlaces()}
+                    {reserve}
+                </div>
             </div>
         )
     }

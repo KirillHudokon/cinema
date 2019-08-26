@@ -52,7 +52,7 @@ class  Home extends React.Component{
                 <header className='header'>
                     <div className='flexContainer'>
                         <div className='logo'>
-                            React Cinema
+                            Cinema
                         </div>
                         { HeaderInfo }
                     </div>
