@@ -3,13 +3,14 @@ import LogOut from '../components/Auth/LogOut'
 import {connect} from 'react-redux'
 import {logout,} from "../actions/UserAction";
 import {getUserBlockPlaces} from "../actions/HoleAction";
-import Holes from './Holes'
+import Holes from './Holes/Holes'
 import AccountImage from "../components/account/AccountImage";
 import Form from './Form'
 class  Home extends React.Component{
     componentDidMount(){
-        const {user,getUserBlockPlacesAction} = this.props
+        const {user, getUserBlockPlacesAction} = this.props
         if(user.cred) {
+            console.log(user.cred)
             getUserBlockPlacesAction(user.cred.uid)
         }
     }

@@ -1,8 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import CinemaLines from "./CinemaLines";
+import CinemaLines from "../../components/Holes/CinemaLines";
 import {blockPlaces, blockQueue,userBlockQueue,updateUserBlockPlaces} from "../../actions/HoleAction";
-import UserBookedPlaces from "./UserBookedPlaces";
+import UserBookedPlaces from "../../components/Holes/UserBookedPlaces";
+import BookPlaces from "../../components/Holes/BookPlaces";
 class Places extends React.Component{
     renderCinemaPlaces=()=>{
         const {queue,rooms,blockQueueAction,userBlockQueueAction,userQueue}=this.props
@@ -34,9 +35,9 @@ class Places extends React.Component{
     }
 
     render(){
-        console.log(this.props)
         const {user,userBooked}=this.props
         const userBooks=userBooked ? <UserBookedPlaces places={userBooked}/> : null
+        const p=userBooked ?         <BookPlaces places={userBooked}/>: null
         const reserve= user.cred ?
                        <button className='btn_prin' onClick={this.blockPlace}>Book places</button>:
                        <p>Войдите чтобы Забронировать</p>
@@ -47,6 +48,7 @@ class Places extends React.Component{
                     {this.renderCinemaPlaces()}
                     {reserve}
                 </div>
+                {p}
             </div>
         )
     }
@@ -57,7 +59,7 @@ export const mapStateToProps = store =>({
     user:store.user,
     rooms:store.holes.rooms,
     queue:store.holes.queue,
-    userBooked:store.holes.userBooked
+    userBooked:store.holes.userBooked,
 })
 export const mapDispatchToProps = dispatch =>({
     blockPlacesAction:(queue)=>dispatch(blockPlaces(queue)),

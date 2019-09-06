@@ -336,8 +336,7 @@ li:last-child{
     border-bottom: none;
 }
 .films{
-    min-width: 700px;
-    max-width: 900px;
+    max-width: 710px;
     background: white;
     border: 1px solid black;
     font-family: sans-serif;

@@ -21,64 +21,68 @@ class Form extends React.Component{
         e.preventDefault()
         this.setState({[e.target.name]:e.target.value})
     }
+    renderFormInf=()=>{
+        const {loginAction,signUpAction} = this.props
+        const {visible,email,password,name}=this.state
+        switch(true){
+            case visible:
+                return <div className='formInf'>
+                    <div>
+                        <h2 className='formName'>Войти</h2>
+                    </div>
+                    <div>
+                        <div className='iconContainer'>
+                            <FontAwesomeIcon className='icon' icon={faEnvelope}/>
+                            <input type="text" placeholder="E-mail" name='email' onChange={this.handleChanger}
+                                   value={email}/>
+                        </div>
+                        <div className='iconContainer'>
+                            <FontAwesomeIcon className='icon' icon={faKey}/>
+                            <input type="password" placeholder="Пароль" name='password' onChange={this.handleChanger}
+                                   value={password}/>
+                        </div>
+                    </div>
+                    <div>
+                        <Login email={email} password={password} login={loginAction}/>
+                        <button className='formClick' onClick={this.handleClicker}>Нет аккаунта?</button>
+                    </div>
+                </div>
+            case !visible:
+                return <div className='formInf'>
+                    <div>
+                        <h2 className='formName'>Регистрация</h2>
+                    </div>
+                    <div>
+                        <div className='iconContainer'>
+                            <FontAwesomeIcon className='icon' icon={faEnvelope}/>
+                            <input type="text" placeholder="E-mail" name='email' onChange={this.handleChanger}
+                                   value={email}/>
+                        </div>
+                        <div className='iconContainer'>
+                            <FontAwesomeIcon className='icon' icon={faUser}/>
+                            <input type="text" placeholder="Логин" name='name' onChange={this.handleChanger}
+                                   value={name}/>
+                        </div>
+                        <div className='iconContainer'>
+                            <FontAwesomeIcon className='icon' icon={faKey}/>
+                            <input type="password" placeholder="Пароль" name='password' onChange={this.handleChanger}
+                                   value={password}/>
+                        </div>
+                    </div>
+                    <div>
+                        <SignUp email={email} password={password} name={name}
+                                signUp={signUpAction}/>
+                        <button className='formClick' onClick={this.handleClicker}>Есть аккаунт?</button>
+                    </div>
+                </div>
+        }
+    }
     render(){
-        const {loginAction,signUpAction,user} = this.props
-        const {visible}=this.state
+
         return (
             <div className='formBlock'>
                 <form>
-                    {
-                      visible && <div className='formInf'>
-                          <div>
-                              <h2 className='formName'>Войти</h2>
-                          </div>
-                          <div>
-                              <div className='iconContainer'>
-                                  <FontAwesomeIcon className='icon' icon={faEnvelope}/>
-                                  <input type="text" placeholder="E-mail" name='email' onChange={this.handleChanger}
-                                       value={this.state.email}/>
-                              </div>
-                              <div className='iconContainer'>
-                                  <FontAwesomeIcon className='icon' icon={faKey}/>
-                                  <input type="password" placeholder="Пароль" name='password' onChange={this.handleChanger}
-                                       value={this.state.password}/>
-                              </div>
-                          </div>
-                          <div>
-                              <Login email={this.state.email} password={this.state.password} login={loginAction}/>
-                              <button className='formClick' onClick={this.handleClicker}>Нет аккаунта?</button>
-                          </div>
-                        </div>
-                    }
-                    {
-                      !visible && <div className='formInf'>
-                          <div>
-                              <h2 className='formName'>Регистрация</h2>
-                          </div>
-                          <div>
-                              <div className='iconContainer'>
-                                  <FontAwesomeIcon className='icon' icon={faEnvelope}/>
-                                  <input type="text" placeholder="E-mail" name='email' onChange={this.handleChanger}
-                                          value={this.state.email}/>
-                              </div>
-                              <div className='iconContainer'>
-                                  <FontAwesomeIcon className='icon' icon={faUser}/>
-                                  <input type="text" placeholder="Логин" name='name' onChange={this.handleChanger}
-                                          value={this.state.name}/>
-                              </div>
-                              <div className='iconContainer'>
-                                  <FontAwesomeIcon className='icon' icon={faKey}/>
-                                  <input type="password" placeholder="Пароль" name='password' onChange={this.handleChanger}
-                                           value={this.state.password}/>
-                              </div>
-                          </div>
-                          <div>
-                               <SignUp email={this.state.email} password={this.state.password} name={this.state.name}
-                                   signUp={signUpAction}/>
-                               <button className='formClick' onClick={this.handleClicker}>Есть аккаунт?</button>
-                          </div>
-                        </div>
-                    }
+                    {this.renderFormInf()}
                 </form>
             </div>
         );

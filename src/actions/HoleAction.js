@@ -88,7 +88,7 @@ const onUpdateUserBlockPlacesError=(error)=>({
 export const resetUserBlockPlaces=()=>({
     type:RESET_USER_BLOCK_PLACES
 })
-export const getHoles = ()=>{
+export const getHoles = ()=>{ //получение залов с местами
     return dispatch => {
         dispatch(onHoleRequest())
         fire.firestore().collection('hole').doc('holes').get().then((snap)=> {
@@ -99,7 +99,7 @@ export const getHoles = ()=>{
     }
 }
 
-export const blockPlaces =(queue)=>{
+export const blockPlaces =(queue)=>{ //отправка всей очереди и получение
     return dispatch => {
         dispatch(onBlockPlacesRequest())
         fire.firestore().collection('hole').doc('holes').set({
@@ -115,8 +115,7 @@ export const blockPlaces =(queue)=>{
         });
     }
 }
-export const blockQueue = (queue,film,i,state) =>{
-    console.log(queue,queue[film],film,i,state)
+export const blockQueue = (queue,film,i,state) =>{ // хранение очереди(всей)
     return dispatch =>{
         const newStatusLocked=[...queue[film].slice(0,i),{status:'locked'},...queue[film].slice(i+1)]
         const newStatusUnlocked=[...queue[film].slice(0,i),{status:'unlocked'},...queue[film].slice(i+1)]
@@ -134,7 +133,8 @@ export const blockQueue = (queue,film,i,state) =>{
     }
 }
 
-export const userBlockQueue = (userQueue,film,index,state) =>{
+export const userBlockQueue = (userQueue,film,index,state) =>{ // хранение очереди(юзера)
+    console.log(film,index)
     return dispatch =>{
         let newStatusLocked=[...userQueue, {[film]:index+1}]
         let newStatusUnlocked=[]
@@ -157,17 +157,21 @@ export const userBlockQueue = (userQueue,film,index,state) =>{
         }
     }
 }
-export const getUserBlockPlaces=(uid)=>{
+export const getUserBlockPlaces=(uid)=>{ //получение броней юзера
+    console.log(uid)
     return dispatch => {
         dispatch(onGetUserBlockPlacesRequest())
         fire.firestore().collection('users').doc(uid).get().then((snap)=> {
-            dispatch(onGetUserBlockPlacesSuccess(snap.data().booked))
+            if (snap.exists) {
+                dispatch(onGetUserBlockPlacesSuccess(snap.data().booked))
+            }
         }).catch((error) => {
             dispatch(onGetUserBlockPlacesError(error))
         });
     }
 }
-export const updateUserBlockPlaces=(uid,userQueue)=>{
+export const updateUserBlockPlaces=(uid,userQueue)=>{ //апдейт броней юзера
+    console.log('запрос')
     return dispatch => {
         dispatch(onUpdateUserBlockPlacesRequest())
         fire.firestore().collection('users').doc(uid).update({
@@ -175,7 +179,7 @@ export const updateUserBlockPlaces=(uid,userQueue)=>{
         }).then(()=>{
             dispatch(onUpdateUserBlockPlacesSuccess(userQueue))
         }).catch((error) => {
-            dispatch(onGetUserBlockPlacesError(error))
+            dispatch(onUpdateUserBlockPlacesError(error))
         });
     }
 }

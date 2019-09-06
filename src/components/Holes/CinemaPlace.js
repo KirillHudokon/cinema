@@ -6,6 +6,7 @@ class CinemaPlace extends Component {
     state={
         status:this.props.status
     }
+
     changeStatus=()=>{
         const {i,film, blockQueue,queue,userBlockQueue,userQueue}=this.props
         const {status}=this.state

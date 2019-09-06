@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import {getHoles} from "../actions/HoleAction";
-import Places from "../components/Holes/Places";
+import {getHoles} from "../../actions/HoleAction";
+import Places from "./Places";
 
 
 class Holes extends React.Component{
@@ -9,12 +9,9 @@ class Holes extends React.Component{
         this.props.getHolesAction()
     }
     render(){
-        return (
-            <div>
-                <Places/>
-            </div>
-        )
+        return <Places/>
     }
+
 }
 export const mapDispatchToProps = dispatch =>({
     getHolesAction:()=>dispatch(getHoles())

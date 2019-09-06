@@ -15,7 +15,6 @@ import {
     UPDATE_USER_BLOCK_PLACES_SUCCESS,
     RESET_USER_BLOCK_PLACES
 } from '../actions/HoleAction'
-import {LOGOUT_HOLE_FAIL, LOGOUT_HOLE_REQUEST, LOGOUT_HOLE_SUCCESS, GET_USER_PLACES} from "../actions/UserAction";
 const initialState = {
     rooms:{},
     error: '',
@@ -61,15 +60,6 @@ export function holesReducer(state=initialState, action) {
         case UPDATE_USER_BLOCK_PLACES_FAIL:
             return { ...state, error: action.payload }
 
-        case LOGOUT_HOLE_REQUEST:
-            return { ...state, isFetching: true, error: '' }
-        case LOGOUT_HOLE_SUCCESS:
-            return { ...state, isFetching: false, rooms: {...action.payload}, queue:{...action.payload} }
-        case LOGOUT_HOLE_FAIL:
-            return { ...state, isFetching: false, error: action.payload }
-
-        case GET_USER_PLACES:
-            return { ...state, error: '', userQueue: action.payload, userBooked:action.payload }
 
         case RESET_USER_BLOCK_PLACES:
             return {...initialState}
