@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 class UserBookedPlaces extends Component {
     renderPlaces(){
         if(this.props.places.length===0){
-            return <li>У вас еще нет броней</li>
+            return <li className='warnBookedPlace'>У вас еще нет броней</li>
         }
         return this.props.places.map(filmKey=>{
            return Object.keys(filmKey).map((film,i)=>{
-                return <li className='userBookedPlace' key={i}>
+                return <li className='userBookedPlace books' key={i}>
                     {film} : {filmKey[film]} место
                 </li>
             })
@@ -16,7 +16,7 @@ class UserBookedPlaces extends Component {
     }
     render() {
         return (
-            <div className='userBookedPlaces'>
+            <div className='userBookedPlaces booked'>
                 <ul>
                 {this.renderPlaces()}
                 </ul>

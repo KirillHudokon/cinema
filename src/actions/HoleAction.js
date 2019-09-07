@@ -134,7 +134,6 @@ export const blockQueue = (queue,film,i,state) =>{ // хранение очер�
 }
 
 export const userBlockQueue = (userQueue,film,index,state) =>{ // хранение очереди(юзера)
-    console.log(film,index)
     return dispatch =>{
         let newStatusLocked=[...userQueue, {[film]:index+1}]
         let newStatusUnlocked=[]
@@ -158,7 +157,6 @@ export const userBlockQueue = (userQueue,film,index,state) =>{ // хранени
     }
 }
 export const getUserBlockPlaces=(uid)=>{ //получение броней юзера
-    console.log(uid)
     return dispatch => {
         dispatch(onGetUserBlockPlacesRequest())
         fire.firestore().collection('users').doc(uid).get().then((snap)=> {

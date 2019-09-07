@@ -7,6 +7,11 @@ class CinemaPlace extends Component {
         status:this.props.status
     }
 
+    static getDerivedStateFromProps(props, state){
+        if(props.status!== state.status){
+               console.log(props.status,state.status)
+        }
+    }
     changeStatus=()=>{
         const {i,film, blockQueue,queue,userBlockQueue,userQueue}=this.props
         const {status}=this.state

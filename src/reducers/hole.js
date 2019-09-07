@@ -22,7 +22,7 @@ const initialState = {
     userBlocks:[],
     userQueue:[],
     isFetching: false,
-    userBooked:null
+    userBooked:[]
 }
 export function holesReducer(state=initialState, action) {
     switch (action.type) {

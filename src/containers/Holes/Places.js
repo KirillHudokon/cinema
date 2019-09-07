@@ -35,20 +35,23 @@ class Places extends React.Component{
     }
 
     render(){
-        const {user,userBooked}=this.props
-        const userBooks=userBooked ? <UserBookedPlaces places={userBooked}/> : null
-        const p=userBooked ?         <BookPlaces places={userBooked}/>: null
-        const reserve= user.cred ?
-                       <button className='btn_prin' onClick={this.blockPlace}>Book places</button>:
-                       <p>Войдите чтобы Забронировать</p>
+        const {user,userBooked,userQueue,queue,blockQueueAction,userBlockQueueAction}=this.props
+        const userBooks=user.cred ? <UserBookedPlaces places={userBooked}/> : null
+        const userLiveBooks=user.cred ? <BookPlaces   userQueue={userQueue}
+                                                      queue={queue}
+                                                      blockQueue={blockQueueAction}
+                                                      userBlockQueue={userBlockQueueAction}
+                                                      reservePlaces={userBooked}
+                                                      places={userQueue}
+                                                      blockPlace={this.blockPlace}
+                                        />: null
         return (
             <div className='placeContainer'>
                 {userBooks}
                 <div className='films'>
                     {this.renderCinemaPlaces()}
-                    {reserve}
                 </div>
-                {p}
+                {userLiveBooks}
             </div>
         )
     }
