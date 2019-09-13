@@ -6,6 +6,7 @@ import {getUserBlockPlaces} from "../actions/HoleAction";
 import Holes from './Holes/Holes'
 import AccountImage from "../components/account/AccountImage";
 import Form from './Form'
+import Menu from "./Menu";
 class  Home extends React.Component{
     componentDidMount(){
         const {user, getUserBlockPlacesAction} = this.props
@@ -48,7 +49,9 @@ class  Home extends React.Component{
         const {user}=this.props
         let HeaderInfo= user.cred ? this.renderHeaderAuthInfo() : this.renderHeaderWithOutInfo()
         return (
-            <div>
+            <>
+                <div className='supBack'/>
+
                 <header className='header'>
                     <div className='flexContainer'>
                         <div className='logo'>
@@ -57,10 +60,12 @@ class  Home extends React.Component{
                         { HeaderInfo }
                     </div>
                 </header>
-                <main>
-                    <Holes/>
+                <main className='main'>
+                   {/* <Holes/>*/}
+                   <Menu/>
                 </main>
-            </div>
+
+            </>
         );
     }
 }

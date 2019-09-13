@@ -5,9 +5,11 @@ import Places from "./Places";
 
 
 class Holes extends React.Component{
+
     componentDidMount(){
         this.props.getHolesAction()
     }
+
     render(){
         return <Places/>
     }

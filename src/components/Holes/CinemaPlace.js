@@ -7,11 +7,7 @@ class CinemaPlace extends Component {
         status:this.props.status
     }
 
-    static getDerivedStateFromProps(props, state){
-        if(props.status!== state.status){
-               console.log(props.status,state.status)
-        }
-    }
+
     changeStatus=()=>{
         const {i,film, blockQueue,queue,userBlockQueue,userQueue}=this.props
         const {status}=this.state
@@ -33,15 +29,15 @@ class CinemaPlace extends Component {
         const {i}=this.props
         const {status} = this.state
         if( status === 'unlocked'){
-            return <div className='placeUnlocked' onClick={this.changeStatus} key={i}>
+            return <div className='placeUnlocked' onClick={this.changeStatus}>
                 <p>{i+1}</p>
             </div>
         }else if(status==='prelocked'){
-            return <div className='placePreLocked' onClick={this.changeStatus}   key={i}>
+            return <div className='placePreLocked' onClick={this.changeStatus}>
                 <p>{i+1}</p>
             </div>
         } else{
-            return <div className='placeLocked'  key={i}>
+            return <div className='placeLocked'>
                 <p>{i+1}</p>
             </div>
         }
