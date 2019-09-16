@@ -419,16 +419,15 @@ li:last-child{
 }
 .categories{
     min-width: 300px;
-    background: #6b4918;
+    background: #4b4b4b;
     border-radius: 15px;
 }
 .category{
     width: 100%;
     min-height: 50px;
-    background: #6b4918;
     display: flex;
     background: none;
-    border-bottom: 1px solid #573600;
+    border-bottom: 1px solid rgb(17, 17, 17);
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -472,8 +471,9 @@ li:last-child{
 .viewContainerContent{
     width: 100%;
     padding: 5px;
-    background: #6b4918;
+    background: #4b4b4b;
     border-bottom: 1px solid black;
+
 }
 .star{
     width: 14px;
