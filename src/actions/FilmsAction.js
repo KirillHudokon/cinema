@@ -12,6 +12,9 @@ export const GET_FILMS_FAIL = 'GET_FILMS_FAIL'
 
 export const SORT_FILMS='SORT_FILMS'
 
+export const ACTIVE_FILM_CONTENT='ACTIVE_FILM_CONTENT'
+
+export const FULL_FILM='FULL_FILM'
 
 const onCategoriesRequest = () => ({
     type: GET_CATEGORIES_REQUEST
@@ -47,8 +50,15 @@ const sortFilms=(sort)=> ({
     payload: sort,
 })
 
+const activeFilmContent=(active)=> ({
+    type: ACTIVE_FILM_CONTENT,
+    payload: active,
+})
 
-
+const onFullFilm=(film)=> ({
+    type: FULL_FILM,
+    payload: film,
+})
 
 export const getCategoriesAction=()=>{
     let categories=[];
@@ -88,7 +98,6 @@ export const sortFilmAction=(category,films)=>{
             films.forEach(key => {
                 Object.values(key).map(film => {
                     if (film.category === category) {
-                        console.log(key)
                         sortMas.push(key)
                     }
                 })
@@ -96,5 +105,18 @@ export const sortFilmAction=(category,films)=>{
 
         }
         dispatch(sortFilms(sortMas))
+        dispatch(onFullFilm([]))
+    }
+}
+export const activeFilmContentAction=(active)=>{
+    return dispatch=>{
+        Object.keys(active).map(key=>dispatch(activeFilmContent({activeFilm:key,activeCategory:active[key].category}))
+        )
+    }
+}
+export const fullFilmAction=(film)=>{
+    return dispatch=>{
+        dispatch(onFullFilm([film]))
+        dispatch(sortFilms([]))
     }
 }

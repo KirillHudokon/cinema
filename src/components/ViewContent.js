@@ -2,15 +2,14 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faStar} from "@fortawesome/free-solid-svg-icons";
+import {Link} from "react-router-dom";
+import Place from "../containers/Holes/Place";
 
 class ViewContent extends Component {
     static defaultProps = {};
 
     static propTypes = {};
 
-    state = {
-        full:false
-    };
     renderRate=(rate)=>{
         let stars=[]
         for(let i=1;i<=5;i++){
@@ -22,20 +21,53 @@ class ViewContent extends Component {
         }
         return stars
     }
+    renderPlaces=(places)=>{
+        const {fullFilm,userQueue,queue,userBlockQueue,activeFilm}=this.props
+        let nameOfFilm=fullFilm.map(key=> Object.values(key).map(filmName=>filmName.name)).join('');
+        return places.length ? places.map((place,i)=>{
+                return <Place
+                    place={place}
+                    i={i}
+                    film={nameOfFilm}
+                    userQueue={userQueue}
+                    userBlockQueueAction={userBlockQueue}
+                    filmId={activeFilm}
+                    queue={queue}
+                />
+        }) : null
+    }
 
     renderText(text){
        return text.split(' ').splice(0,31).map((key,i)=>{
            return i===30 ? '...' : key
        }).join(' ')
     }
-    seeFull=()=>{
-        this.setState({full:!this.state.full})
+    seeFull=(film)=>{
+        this.props.fullFilmAction(film)
+        this.props.activeFilmContentAction(film)
+    }
+    renderBlockContainer(film){
+        const {fullFilm,user}=this.props
+        if(fullFilm.length&&user.cred){
+            return <div className='blockContainer'>
+                <div className='blockText'>Забронированые места:</div>
+                <div className='screen'>Экран</div>
+                <div className='blockPlaces'>{this.renderPlaces(film.allPlaces)}</div>
+            </div>
+        }else if(fullFilm.length&&!user.cred){
+            return <div>Войдите чтобы посмотреть/забронировать места</div>
+        }else{
+            return null
+        }
     }
     renderFilms(content){
+        const {fullFilm,userQueue,queue,blockQueueAction,userBlockQueueAction,}=this.props
+
         if(!content.length){
             return null
         }else{
             return content.map(key=>{
+                let pathOfFilm = Object.keys(key).map(path=>path).join('')
                 return Object.values(key).map(film=>{
                     return <div className='viewContainerContent' key={film.name}>
                         <div className='viewContainerTitleAndRate'>
@@ -53,8 +85,8 @@ class ViewContent extends Component {
                             </div>
                             <div className='viewContainerInf'>
                                 <div className='viewContainerText content'>
-                                    {!this.state.full && this.renderText(film.text)}
-                                    {this.state.full && film.text }
+                                    {!fullFilm.length && this.renderText(film.text)}
+                                    {fullFilm.length && film.text}
                                 </div>
                                 <div className='viewContainerYearOfManufacture content'>
                                     Год выпуска: {film.year}
@@ -74,11 +106,14 @@ class ViewContent extends Component {
                                 </div>
                             </div>
                         </div>
+                        <div className='viewContainerPlaces'>
+                            {this.renderBlockContainer(film)}
+                        </div>
                         <div className='viewContainerExtra'>
                             <div className='viewContainerExDet'>
-                                {!this.state.full && <button onClick={this.seeFull} className='viewContainerDetails'>
+                                {!fullFilm.length &&  <Link to={`/${film.category}/${pathOfFilm}`} onClick={()=>this.seeFull(key)} className='viewContainerDetails'>
                                     Подробнее
-                                </button>}
+                                </Link> }
                             </div>
                             <div className='viewContainerDate'>
                                 {film.time}
@@ -89,10 +124,16 @@ class ViewContent extends Component {
             })
         }
     }
-
     render() {
-        const {sortFilms,films}=this.props
-        let content= sortFilms.length ? this.renderFilms(sortFilms) : this.renderFilms(films)
+        const {sortFilms,films,fullFilm}=this.props
+        let content
+          if(fullFilm.length){
+             content = this.renderFilms(fullFilm)
+          }else if (sortFilms.length){
+              content = this.renderFilms(sortFilms)
+          } else{
+              content = this.renderFilms(films)
+          }
         return (
             <div>
                 {content}
@@ -100,5 +141,11 @@ class ViewContent extends Component {
         );
     }
 }
-
+{/*<CinemaLines
+                                userQueue={userQueue}
+                                queue={queue}
+                                blockQueue={blockQueueAction}
+                                film={film.name}
+                                userBlockQueue={userBlockQueueAction}
+                            />*/}
 export default ViewContent;

@@ -3,7 +3,6 @@ import LogOut from '../components/Auth/LogOut'
 import {connect} from 'react-redux'
 import {logout,} from "../actions/UserAction";
 import {getUserBlockPlaces} from "../actions/HoleAction";
-import Holes from './Holes/Holes'
 import AccountImage from "../components/account/AccountImage";
 import Form from './Form'
 import Menu from "./Menu";
@@ -61,7 +60,6 @@ class  Home extends React.Component{
                     </div>
                 </header>
                 <main className='main'>
-                   {/* <Holes/>*/}
                    <Menu/>
                 </main>
 

@@ -7,12 +7,18 @@ import {
     GET_FILMS_REQUEST,
     GET_FILMS_SUCCESS,
 
-    SORT_FILMS
+    SORT_FILMS,
+
+    ACTIVE_FILM_CONTENT,
+    FULL_FILM
 } from '../actions/FilmsAction'
 const initialState = {
     categories:[],
     viewContent:[],
-    sort:[]
+    sort:[],
+    activeFilm:undefined,
+    activeFilter:undefined,
+    fullFilm:[]
 }
 export function filmsReducer(state=initialState, action) {
     switch (action.type) {
@@ -32,6 +38,13 @@ export function filmsReducer(state=initialState, action) {
 
         case SORT_FILMS:
             return { ...state, sort:action.payload }
+
+        case ACTIVE_FILM_CONTENT:
+            return { ...state, activeFilm:action.payload.activeFilm, activeFilter:action.payload.activeCategory  }
+
+        case FULL_FILM:
+            return { ...state, fullFilm:action.payload  }
+
 
         default:
             return state

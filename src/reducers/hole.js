@@ -1,7 +1,4 @@
 import {
-    HOLE_REQUEST,
-    HOLE_SUCCESS,
-    HOLE_FAIL,
     BLOCK_PLACES_FAIL,
     BLOCK_PLACES_REQUEST,
     BLOCK_PLACES_SUCCESS,
@@ -13,12 +10,16 @@ import {
     UPDATE_USER_BLOCK_PLACES_FAIL,
     UPDATE_USER_BLOCK_PLACES_REQUEST,
     UPDATE_USER_BLOCK_PLACES_SUCCESS,
+    UPDATE_HOLE_BLOCK_PLACES_FAIL,
+    UPDATE_HOLE_BLOCK_PLACES_REQUEST,
+    UPDATE_HOLE_BLOCK_PLACES_SUCCESS,
+    UPDATE_QUEUE,
     RESET_USER_BLOCK_PLACES
 } from '../actions/HoleAction'
 const initialState = {
     rooms:{},
     error: '',
-    queue:{},
+    queue:[],
     userBlocks:[],
     userQueue:[],
     isFetching: false,
@@ -26,12 +27,8 @@ const initialState = {
 }
 export function holesReducer(state=initialState, action) {
     switch (action.type) {
-        case HOLE_REQUEST:
-            return { ...state, isFetching: true, error: '' }
-        case HOLE_SUCCESS:
-            return { ...state, isFetching: false, rooms: {...action.payload}, queue:{...action.payload} }
-        case HOLE_FAIL:
-            return { ...state, isFetching: false, error: action.payload }
+        case UPDATE_QUEUE:
+            return { ...state, queue:action.payload }
 
         case BLOCK_PLACES_REQUEST:
             return { ...state, error: '' }
@@ -49,14 +46,14 @@ export function holesReducer(state=initialState, action) {
         case GET_USER_BLOCK_PLACES_REQUEST:
             return { ...state, error: '' }
         case GET_USER_BLOCK_PLACES_SUCCESS:
-            return { ...state, error: '', userQueue: action.payload, userBooked:action.payload }
+            return { ...state, error: '', userBooked:action.payload }
         case GET_USER_BLOCK_PLACES_FAIL:
             return { ...state, error: action.payload }
 
         case UPDATE_USER_BLOCK_PLACES_REQUEST:
             return { ...state, error: '' }
         case UPDATE_USER_BLOCK_PLACES_SUCCESS:
-            return { ...state, error: '', userBooked: action.payload }
+            return { ...state, error: '', userBooked: action.payload, userQueue:initialState.userQueue }
         case UPDATE_USER_BLOCK_PLACES_FAIL:
             return { ...state, error: action.payload }
 

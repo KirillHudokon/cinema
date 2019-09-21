@@ -350,13 +350,16 @@ li:last-child{
     margin-left: 30px;
 }
 .screen{
-    width: 90%;
-    border-bottom: 3px solid black;
+    width: 95%;
+    border-bottom: 3px solid #e8e6e3;
     margin: 20px auto;
     text-transform: uppercase;
     font-weight: 400;
     padding: 10px 0;
     font-size: 18px;
+    display: flex;
+    justify-content: center;
+
 }
 .line{
     display: flex;
@@ -367,6 +370,7 @@ li:last-child{
 .liveBooked{
     max-width: 350px;
     width: 300px;
+    margin-left: 40px;
 }
 .delete{
     position: absolute;
@@ -395,11 +399,11 @@ li:last-child{
     padding-bottom: 10px;
 }
 .menu{
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     height: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 20px;
     box-sizing: border-box;
 
@@ -418,6 +422,7 @@ li:last-child{
     background-color:  black;
 }
 .categories{
+    color:#e8e6e3;
     min-width: 300px;
     background: #4b4b4b;
     border-radius: 15px;
@@ -433,7 +438,8 @@ li:last-child{
     cursor: pointer;
     font: 18px 'Verdana';
     transition: 0.5s;
-
+    text-decoration: none;
+    color:#e8e6e3;
 }
 .category:hover{
     background: black;
@@ -470,10 +476,10 @@ li:last-child{
 }
 .viewContainerContent{
     width: 100%;
-    padding: 5px;
+    padding: 5px 25px;
     background: #4b4b4b;
     border-bottom: 1px solid black;
-
+    color: #e8e6e3;
 }
 .star{
     width: 14px;
@@ -498,7 +504,6 @@ li:last-child{
 .viewContainerImage{
     width: 200px;
     height: 300px;
-    padding-left: 20px;
     padding-right: 20px;
 }
 .viewContainerInf{
@@ -513,8 +518,9 @@ li:last-child{
     background: black;
     color: white;
     padding: 5px;
-    margin-left: 20px;
     cursor: pointer;
+    text-decoration: none;
+    font-size: 15px;
 }
 .viewContainerExtra{
     display: flex;
@@ -524,17 +530,14 @@ li:last-child{
 }
 .viewContainerDate{
     margin-bottom: 10px;
-    margin-right: 10px;
 }
 .viewContainerTitle{
     text-align: left;
-    padding-left: 20px;
     font-size: 20px;
     margin-top: 10px;
 }
 .viewContainerRate{
     text-align: right;
-    padding-right: 20px;
     margin-top: 10px;
 }
 .viewContainerTitleAndRate{
@@ -545,4 +548,23 @@ li:last-child{
 }
 .right{
     justify-content: flex-end;
+}
+.viewContainerPlaces{
+
+}
+.blockContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+}
+.blockPlaces{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.blockText{
+    text-align: left;
+    justify-content: flex-end;
+    margin-bottom: 10px;
 }

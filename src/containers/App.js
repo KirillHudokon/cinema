@@ -2,6 +2,7 @@ import React from 'react';
 import Home from './Home'
 import {connect} from 'react-redux'
 import {userListener} from "../actions/UserAction";
+import {BrowserRouter as Router, Route} from "react-router-dom";
 
 class App extends React.Component{
     componentDidMount(){
@@ -10,9 +11,11 @@ class App extends React.Component{
     render(){
         if(!this.props.user.loading) {
             return (
-                <div className="App">
-                    <Home/>
-                </div>
+                <Router>
+                    <div className="App">
+                       <Home/>
+                    </div>
+                </Router>
             )
         }else{
             return(

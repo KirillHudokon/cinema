@@ -1,5 +1,5 @@
 import fire from "../config/Fire";
-import {resetUserBlockPlaces,getUserBlockPlaces,getHoles} from './HoleAction'
+import {resetUserBlockPlaces,getUserBlockPlaces} from './HoleAction'
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -120,8 +120,6 @@ export const logout=()=>{            //логаут
         fire.auth().signOut().then(() => {
             dispatch(onLogOutSuccess())
             dispatch(resetUserBlockPlaces())
-        }).then(()=>{
-            dispatch(getHoles())
         }).catch((error)=> {
             dispatch(onLogOutError(error))
         });
