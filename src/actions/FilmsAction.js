@@ -1,6 +1,7 @@
 import fire from "../config/Fire";
 
 import dateFormatter from 'date-and-time';
+import {Link} from "react-router-dom";
 
 export const GET_CATEGORIES_REQUEST = 'GET_CATEGORIES_REQUEST'
 export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS'
@@ -15,6 +16,10 @@ export const SORT_FILMS='SORT_FILMS'
 export const ACTIVE_FILM_CONTENT='ACTIVE_FILM_CONTENT'
 
 export const FULL_FILM='FULL_FILM'
+
+export const ACTIVE_CATEGORY='ACTIVE_CATEGORY'
+
+export const RESET_TO_MAIN_MENU='RESET_TO_MAIN_MENU'
 
 const onCategoriesRequest = () => ({
     type: GET_CATEGORIES_REQUEST
@@ -58,6 +63,13 @@ const activeFilmContent=(active)=> ({
 const onFullFilm=(film)=> ({
     type: FULL_FILM,
     payload: film,
+})
+const onResetToMainMenu=()=>({
+    type:RESET_TO_MAIN_MENU
+})
+const onActiveCategory=(category)=>({
+    type:ACTIVE_CATEGORY,
+    payload:category
 })
 
 export const getCategoriesAction=()=>{
@@ -105,6 +117,7 @@ export const sortFilmAction=(category,films)=>{
 
         }
         dispatch(sortFilms(sortMas))
+        dispatch(onActiveCategory(category))
         dispatch(onFullFilm([]))
     }
 }
@@ -118,5 +131,31 @@ export const fullFilmAction=(film)=>{
     return dispatch=>{
         dispatch(onFullFilm([film]))
         dispatch(sortFilms([]))
+    }
+}
+export const resetToMainMenu=()=>{
+    return dispatch=>{
+        dispatch(onResetToMainMenu())
+    }
+}
+export const filterFilmsAction=(filter, films)=>{
+    return dispatch =>{
+
+       dispatch(sortFilms(bubbleSort(films)))
+       dispatch(onActiveCategory(filter))
+        function bubbleSort(arr) {
+            for (let i = 0, endI = arr.length - 1; i < endI; i++) {
+                for (let j = 0, endJ = endI - i; j < endJ; j++) {
+                    let pathOfFilm = Object.values(arr[j])[0]
+                    let pathOfFilmNext= Object.values(arr[j+1])[0]
+                    if (pathOfFilm[filter] < pathOfFilmNext[filter]) {
+                        let swap = arr[j];
+                        arr[j] = arr[j + 1];
+                        arr[j + 1] = swap;
+                    }
+                }
+            }
+            return arr;
+        }
     }
 }

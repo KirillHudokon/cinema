@@ -3,9 +3,12 @@ import LogOut from '../components/Auth/LogOut'
 import {connect} from 'react-redux'
 import {logout,} from "../actions/UserAction";
 import {getUserBlockPlaces} from "../actions/HoleAction";
+import {resetToMainMenu} from "../actions/FilmsAction";
 import AccountImage from "../components/account/AccountImage";
 import Form from './Form'
 import Menu from "./Menu";
+import {Link} from "react-router-dom";
+
 class  Home extends React.Component{
     componentDidMount(){
         const {user, getUserBlockPlacesAction} = this.props
@@ -45,16 +48,17 @@ class  Home extends React.Component{
         </div>
     }
     render(){
-        const {user}=this.props
+        const {user,resetToMainMenu}=this.props
         let HeaderInfo= user.cred ? this.renderHeaderAuthInfo() : this.renderHeaderWithOutInfo()
         return (
             <>
                 <div className='supBack'/>
-
                 <header className='header'>
                     <div className='flexContainer'>
                         <div className='logo'>
-                            Cinema
+                            <Link to='/' onClick={resetToMainMenu} className='logoText'>
+                                Cinema
+                            </Link>
                         </div>
                         { HeaderInfo }
                     </div>
@@ -73,6 +77,7 @@ export const mapStateToProps = store =>({
 })
 export const mapDispatchToProps = dispatch =>({
     logOutAction: ()=>dispatch(logout()),
-    getUserBlockPlacesAction: (uid)=>dispatch(getUserBlockPlaces(uid))
+    getUserBlockPlacesAction: (uid)=>dispatch(getUserBlockPlaces(uid)),
+    resetToMainMenu:()=>dispatch(resetToMainMenu())
 })
 export default connect(mapStateToProps,mapDispatchToProps)(Home);

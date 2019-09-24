@@ -1,4 +1,5 @@
 import React, {PureComponent } from 'react';
+import {Link} from "react-router-dom";
 
 
 class Place extends PureComponent {
@@ -49,6 +50,7 @@ class Place extends PureComponent {
         } else{
             return <div className='placeLocked'>
                 <p>{i+1}</p>
+
             </div>
         }
     }

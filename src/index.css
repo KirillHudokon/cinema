@@ -85,6 +85,8 @@ table {
     height: 70px;
     background-color: black;
     color: white;
+    position: fixed;
+    z-index: 99999;
 }
 .flexContainer {
     width: 100%;
@@ -106,6 +108,10 @@ table {
     word-spacing: 3px;
     letter-spacing: 1px;
     font-family:Open Sans,sans-serif;
+}
+.logoText{
+    text-decoration: none;
+    color: rgb(232, 230, 227);
 }
 .logo:hover{
     color: #949494;
@@ -314,25 +320,35 @@ form{
    align-items: flex-start;
 }
 .userBookedPlace{
+    border-bottom: 1px solid;
+    border-top-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-color: rgb(102, 102, 102);
+    background-color: rgb(61, 65, 67);
+    color: rgb(232, 230, 227);
     display: flex;
     align-items: center;
     margin: 5px;
-    color: black;
     min-height: 40px;
     text-align: left;
     overflow-x:hidden;
-    cursor: pointer;
     transition: 0.5s;
     position: relative;
-    border-bottom: 1px solid black;
     padding-top: 5px;
     padding-bottom: 5px;
+
 }
 .userBookedPlaces{
+    border-bottom: 1px solid;
+    border-top-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-color: rgb(102, 102, 102);
+    background-color: rgb(61, 65, 67);
+    color: rgb(232, 230, 227);
     max-width: 250px;
     width: 200px;
-    background-color: white;
-    border: 1px solid black;
     border-radius: 5px;
     padding-left: 5px;
     padding-right: 5px;
@@ -413,6 +429,8 @@ li:last-child{
     height: 100vh;
     background: url("img/film-zapreschennyy-priem-kino.jpg") no-repeat;
     background-size: cover;
+    padding-top: 70px;
+    box-sizing: border-box;
 }
 .supBack{
     position: fixed;
@@ -421,46 +439,58 @@ li:last-child{
     z-index: -1;
     background-color:  black;
 }
-.categories{
-    color:#e8e6e3;
+.categoriesAndFilters{
+    color: rgb(232, 230, 227);
+    background-image: initial;
+    background-color: rgb(61, 64, 67);
     min-width: 300px;
-    background: #4b4b4b;
     border-radius: 15px;
+    display: flex;
+    justify-content: center;
+}
+.categories{
+    min-width: 50%;
+    box-sizing: border-box;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.filters{
+    min-width: 50%;
+    padding-left: 10px;
+    box-sizing: border-box;
+    padding-right: 10px;
 }
 .category{
     width: 100%;
     min-height: 50px;
     display: flex;
-    background: none;
-    border-bottom: 1px solid rgb(17, 17, 17);
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    font: 18px 'Verdana';
+    font: 15px 'Verdana';
     transition: 0.5s;
     text-decoration: none;
-    color:#e8e6e3;
+    background-image: none;
+    background-color: initial;
+    text-decoration-color: initial;
+    color: rgb(232, 230, 227);
+}
+.nameOfCaegories{
+    font-size: 20px;
+    text-align: left;
+    padding-top: 10px;
+}
+.nameOfFilters{
+    font-size: 20px;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-left: 0px;
+    box-sizing: border-box;
 }
 .category:hover{
-    background: black;
-    color: white;
-    border-bottom:1px solid black;
+    color: black;
 }
-.category:last-child{
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-    border-left: none;
-    border-right: none;
-}
-.category:first-child{
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
-    border-left: none;
-    border-right: none;
-}
-.category:last-child:hover{
-   border:none
-}
+
 .counter{
     font-size: 12px;
     margin-top: 3px;
@@ -468,18 +498,19 @@ li:last-child{
 
 }
 .filmSelection{
-    min-width: 800px;
     max-width: 800px;
-    background: #060606;
     display: flex;
     flex-wrap: wrap;
 }
 .viewContainerContent{
     width: 100%;
     padding: 5px 25px;
-    background: #4b4b4b;
     border-bottom: 1px solid black;
-    color: #e8e6e3;
+    background-image: initial;
+    background-color: rgb(61, 64, 67);
+    border-bottom-color: rgb(102, 102, 102);
+    color: rgb(232, 230, 227);
+    border-radius: 15px;
 }
 .star{
     width: 14px;
@@ -567,4 +598,7 @@ li:last-child{
     text-align: left;
     justify-content: flex-end;
     margin-bottom: 10px;
+}
+.booked{
+    margin-left: 40px;
 }

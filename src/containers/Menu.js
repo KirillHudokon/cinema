@@ -7,7 +7,8 @@ import {
     getFilmsAction,
     sortFilmAction,
     activeFilmContentAction,
-    fullFilmAction
+    fullFilmAction,
+    filterFilmsAction
 } from "../actions/FilmsAction";
 import Categories from "../components/Categories";
 import fire from "../config/Fire";
@@ -22,7 +23,7 @@ import UserBookedPlaces from "../components/Holes/UserBookedPlaces";
 class Menu extends Component {
     static defaultProps = {};
     state={
-        filter:'',
+        filter:''
     }
     static propTypes = {};
 
@@ -33,7 +34,10 @@ class Menu extends Component {
     sortChange=(sort)=>{
         const{films,sortFilmAction}=this.props
         sortFilmAction(sort,films.viewContent)
-        this.setState({filter:sort})
+    }
+    filterChange=(filter)=>{
+        const{films, filterFilms}=this.props
+        filterFilms(filter,films.viewContent)
     }
 
     blockPlace=()=>{
@@ -48,7 +52,12 @@ class Menu extends Component {
         return (
             <div className='menu'>
                 <div className='leftSideContainer'>
-                    <Categories changer={this.sortChange} categories={films.categories}/>
+                    <Categories
+                        changer={this.sortChange}
+                        filterChange={this.filterChange}
+                        categories={films.categories}
+                        films={films.viewContent}
+                    />
                 </div>
                 <div className='centerContainer'>
                     <div className='filmSelection'>
@@ -58,14 +67,22 @@ class Menu extends Component {
                                 {...props}
                                 sortFilms={films.sort}
                                 films={films.viewContent}
-                                activeFilmContentAction={this.props.activeFilmContentAction}
+                                activeFilm={films.activeFilm}
+                                activeFilter={films.activeFilter}
                                 fullFilmAction={this.props.fullFilmAction}
-                                fullFilm={films.fullFilm}/>
+                                activeFilmContentAction={this.props.activeFilmContentAction}
+                                fullFilm={films.fullFilm}
+                                userQueue={userQueue}
+                                queue={queue}
+                                blockQueue={blockQueueAction}
+                                userBlockQueue={userBlockQueueAction}
+                                user={user}
+                            />
                             }
                             exact={true}
                         />
                         <Route
-                            path={`/${this.state.filter}`}
+                            path={`/${films.activeFilter}`}
                             render={(props)=><ViewContent
                                 {...props}
                                 sortFilms={films.sort}
@@ -74,7 +91,12 @@ class Menu extends Component {
                                 activeFilter={films.activeFilter}
                                 fullFilmAction={this.props.fullFilmAction}
                                 activeFilmContentAction={this.props.activeFilmContentAction}
-                                fullFilm={films.fullFilm}/>
+                                fullFilm={films.fullFilm}
+                                userQueue={userQueue}
+                                queue={queue}
+                                blockQueue={blockQueueAction}
+                                userBlockQueue={userBlockQueueAction}
+                                user={user}/>
                             }
                             exact={true}
                         />
@@ -135,6 +157,7 @@ export const mapDispatchToProps = dispatch=>({
     blockPlacesAction:(queue)=>dispatch(blockPlaces(queue)),
     blockQueueAction:(queue,film,index,state)=>dispatch(blockQueue(queue,film,index,state)),
     userBlockQueueAction:(userQueue,film,index,state,type)=>dispatch(userBlockQueue(userQueue,film,index,state,type)),
-    updateUserBlockPlacesAction:(uid,queue)=>dispatch(updateUserBlockPlaces(uid,queue))
+    updateUserBlockPlacesAction:(uid,queue)=>dispatch(updateUserBlockPlaces(uid,queue)),
+    filterFilms:(filter, films)=>dispatch(filterFilmsAction(filter, films))
 })
 export default connect(mapStateToProps,mapDispatchToProps)(Menu);

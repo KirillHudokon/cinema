@@ -19,10 +19,26 @@ class Categories extends Component {
         })
     }
     render() {
+        const {filterChange,films}=this.props
         return(
-            <ul className='categories'>
+            <div className='categoriesAndFilters'>
+                <div className='categories'>
+                    <h6 className='nameOfCaegories'> Категории: </h6>
                 {this.renderCategories()}
-            </ul>
+                </div>
+                <div className='filters'>
+                    <h6 className='nameOfFilters'> Фильтры: </h6>
+                    <Link to='/rate' className='category' onClick={()=>filterChange('rate',films)}>
+                        По рейтингу
+                    </Link>
+                    <Link to='/year' className='category' onClick={()=>filterChange('year',films)}>
+                        По Году
+                    </Link>
+                    <Link to='/country' className='category' onClick={()=>filterChange('country',films)}>
+                        По Странам
+                    </Link>
+                </div>
+            </div>
         )
     }
 }

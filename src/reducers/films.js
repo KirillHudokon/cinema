@@ -10,7 +10,9 @@ import {
     SORT_FILMS,
 
     ACTIVE_FILM_CONTENT,
-    FULL_FILM
+    FULL_FILM,
+    RESET_TO_MAIN_MENU,
+    ACTIVE_CATEGORY
 } from '../actions/FilmsAction'
 const initialState = {
     categories:[],
@@ -44,6 +46,11 @@ export function filmsReducer(state=initialState, action) {
 
         case FULL_FILM:
             return { ...state, fullFilm:action.payload  }
+        case ACTIVE_CATEGORY:
+            return { ...state, activeFilter:action.payload  }
+
+        case RESET_TO_MAIN_MENU:
+            return { ...state, sort:initialState.sort,activeFilm:initialState.activeFilm, activeFilter:initialState.activeFilter, fullFilm:initialState.fullFilm}
 
 
         default:

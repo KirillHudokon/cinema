@@ -38,9 +38,18 @@ class ViewContent extends Component {
     }
 
     renderText(text){
-       return text.split(' ').splice(0,31).map((key,i)=>{
-           return i===30 ? '...' : key
-       }).join(' ')
+        const {fullFilm}=this.props
+        switch (!!fullFilm.length) {
+            case true:
+                return text
+            case false:
+                return text.split(' ').splice(0,31).map((key,i)=>{
+                    return i===30 ? '...' : key
+                }).join(' ')
+            default:
+                return null
+        }
+
     }
     seeFull=(film)=>{
         this.props.fullFilmAction(film)
@@ -85,8 +94,7 @@ class ViewContent extends Component {
                             </div>
                             <div className='viewContainerInf'>
                                 <div className='viewContainerText content'>
-                                    {!fullFilm.length && this.renderText(film.text)}
-                                    {fullFilm.length && film.text}
+                                    {this.renderText(film.text)}
                                 </div>
                                 <div className='viewContainerYearOfManufacture content'>
                                     Год выпуска: {film.year}
