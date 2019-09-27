@@ -12,7 +12,7 @@ exports.createUser = functions.auth.user().onCreate((userRecord) => {
         booked:[]
     });
 });
-exports.CategoriesCounter=functions.firestore.document('/films/{filmsId}').onUpdate( async(change,context)=>{
+exports.filmUpdate=functions.firestore.document('/films/{filmsId}').onUpdate( async(change,context)=>{
     const {filmsId}=context.params
     let freePlacesCounter=0;
     let before=change.before.data();
@@ -60,7 +60,9 @@ exports.filmCreate=functions.firestore.document('/films/{filmsId}').onCreate(asy
                      time: admin.firestore.FieldValue.serverTimestamp(),
                      allPlaces:masWithPlaces,
                      places:placesCounter,
-                     freePlaces:placesCounter
+                     freePlaces:placesCounter,
+                     commentsCounter:0,
+                     comments:[]
                  }
              }, {merge: true});
              await db.collection('categories').doc(snap.data().description.category).set({increment: admin.firestore.FieldValue.increment(1)}, {merge: true})

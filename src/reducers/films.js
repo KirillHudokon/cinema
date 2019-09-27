@@ -12,7 +12,11 @@ import {
     ACTIVE_FILM_CONTENT,
     FULL_FILM,
     RESET_TO_MAIN_MENU,
-    ACTIVE_CATEGORY
+    ACTIVE_CATEGORY,
+
+    UPDATE_COMMENTS_FAIL,
+    UPDATE_COMMENTS_SUCCESS,
+    UPDATE_COMMENTS_REQUEST
 } from '../actions/FilmsAction'
 const initialState = {
     categories:[],
@@ -20,7 +24,8 @@ const initialState = {
     sort:[],
     activeFilm:undefined,
     activeFilter:undefined,
-    fullFilm:[]
+    fullFilm:[],
+    error:'',
 }
 export function filmsReducer(state=initialState, action) {
     switch (action.type) {
@@ -29,14 +34,14 @@ export function filmsReducer(state=initialState, action) {
         case GET_CATEGORIES_SUCCESS:
             return { ...state, categories:action.payload, error: '' }
         case GET_CATEGORIES_FAIL:
-            return { ...state,  error: action.payload }
+            return { ...state,  error: action.payload.message }
 
         case GET_FILMS_REQUEST:
             return { ...state, error: '' }
         case GET_FILMS_SUCCESS:
             return { ...state, viewContent:action.payload, error: '' }
         case GET_FILMS_FAIL:
-            return { ...state,  error: action.payload }
+            return { ...state,  error: action.payload.message }
 
         case SORT_FILMS:
             return { ...state, sort:action.payload }
@@ -51,6 +56,15 @@ export function filmsReducer(state=initialState, action) {
 
         case RESET_TO_MAIN_MENU:
             return { ...state, sort:initialState.sort,activeFilm:initialState.activeFilm, activeFilter:initialState.activeFilter, fullFilm:initialState.fullFilm}
+
+        case UPDATE_COMMENTS_REQUEST:
+            return { ...state, error: '' }
+        case UPDATE_COMMENTS_SUCCESS:
+            return { ...state, error: '' }
+        case UPDATE_COMMENTS_FAIL:
+            return { ...state, error: action.payload.message}
+
+
 
 
         default:

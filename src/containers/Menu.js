@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {userListener} from "../actions/UserAction";
+import {userListener,changePassword} from "../actions/UserAction";
 import {connect} from "react-redux";
 import {
     getCategoriesAction,
@@ -8,7 +8,8 @@ import {
     sortFilmAction,
     activeFilmContentAction,
     fullFilmAction,
-    filterFilmsAction
+    filterFilmsAction,
+    updateComments
 } from "../actions/FilmsAction";
 import Categories from "../components/Categories";
 import fire from "../config/Fire";
@@ -18,6 +19,7 @@ import {Route} from "react-router-dom";
 import {blockPlaces, blockQueue, updateUserBlockPlaces, userBlockQueue} from "../actions/HoleAction";
 import BookPlaces from "../components/Holes/BookPlaces";
 import UserBookedPlaces from "../components/Holes/UserBookedPlaces";
+import NavMenu from "./NavMenu";
 
 
 class Menu extends Component {
@@ -48,9 +50,10 @@ class Menu extends Component {
         }
     }
     render() {
-        const {user,userBooked,userQueue,queue,blockQueueAction,userBlockQueueAction,films}=this.props
+        const {user,userBooked,userQueue,queue,blockQueueAction,userBlockQueueAction,films,changePasswordAction,updateComments}=this.props
         return (
             <div className='menu'>
+                {user.cred && <NavMenu message={user.successfulMessage} error={user.error} places={userBooked} changePassword={changePasswordAction}/>}
                 <div className='leftSideContainer'>
                     <Categories
                         changer={this.sortChange}
@@ -77,6 +80,7 @@ class Menu extends Component {
                                 blockQueue={blockQueueAction}
                                 userBlockQueue={userBlockQueueAction}
                                 user={user}
+                                updateComments={updateComments}
                             />
                             }
                             exact={true}
@@ -96,7 +100,8 @@ class Menu extends Component {
                                 queue={queue}
                                 blockQueue={blockQueueAction}
                                 userBlockQueue={userBlockQueueAction}
-                                user={user}/>
+                                user={user}
+                                updateComments={updateComments}/>
                             }
                             exact={true}
                         />
@@ -115,7 +120,8 @@ class Menu extends Component {
                                 queue={queue}
                                 blockQueue={blockQueueAction}
                                 userBlockQueue={userBlockQueueAction}
-                                user={user}/>
+                                user={user}
+                                updateComments={updateComments}/>
                             }
                             exact={true}
                         />
@@ -131,7 +137,6 @@ class Menu extends Component {
                        blockPlace={this.blockPlace}
                        filmId={films.activeFilm}
                    />}
-                    {user.cred ? <UserBookedPlaces places={userBooked}/> : null}
                 </div>
             </div>
         );
@@ -153,11 +158,12 @@ export const mapDispatchToProps = dispatch=>({
     sortFilmAction:(category,films)=>dispatch(sortFilmAction(category,films)),
     activeFilmContentAction:(active)=>dispatch(activeFilmContentAction(active)),
     fullFilmAction:(film)=>dispatch(fullFilmAction(film)),
-
+    changePasswordAction:(currentPassword,newPassword)=>dispatch(changePassword(currentPassword,newPassword)),
     blockPlacesAction:(queue)=>dispatch(blockPlaces(queue)),
     blockQueueAction:(queue,film,index,state)=>dispatch(blockQueue(queue,film,index,state)),
     userBlockQueueAction:(userQueue,film,index,state,type)=>dispatch(userBlockQueue(userQueue,film,index,state,type)),
     updateUserBlockPlacesAction:(uid,queue)=>dispatch(updateUserBlockPlaces(uid,queue)),
-    filterFilms:(filter, films)=>dispatch(filterFilmsAction(filter, films))
+    filterFilms:(filter, films)=>dispatch(filterFilmsAction(filter, films)),
+    updateComments:(comments,text,filmId)=>dispatch(updateComments(comments,text,filmId))
 })
 export default connect(mapStateToProps,mapDispatchToProps)(Menu);

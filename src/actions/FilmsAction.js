@@ -21,6 +21,10 @@ export const ACTIVE_CATEGORY='ACTIVE_CATEGORY'
 
 export const RESET_TO_MAIN_MENU='RESET_TO_MAIN_MENU'
 
+export const UPDATE_COMMENTS_REQUEST='UPDATE_COMMENTS_REQUEST'
+export const UPDATE_COMMENTS_SUCCESS='UPDATE_COMMENTS_SUCCESS'
+export const UPDATE_COMMENTS_FAIL='UPDATE_COMMENTS_FAIL'
+
 const onCategoriesRequest = () => ({
     type: GET_CATEGORIES_REQUEST
 })
@@ -72,6 +76,19 @@ const onActiveCategory=(category)=>({
     payload:category
 })
 
+const onUpdateCommentsRequest = () => ({
+    type: UPDATE_COMMENTS_REQUEST
+})
+
+const onUpdateCommentsSuccess=()=>({
+    type: UPDATE_COMMENTS_SUCCESS,
+})
+const onUpdateCommentsError=(error)=>({
+    type: UPDATE_COMMENTS_FAIL,
+    error: true,
+    payload: error,
+})
+
 export const getCategoriesAction=()=>{
     let categories=[];
     return  dispatch => {
@@ -93,9 +110,21 @@ export const getFilmsAction=()=>{
         dispatch(onFilmsRequest())
         fire.firestore().collection("films").get().then( querySnapshot => {
             querySnapshot.forEach((doc) => {
-                let transformDate=new Date(1000*doc.data().description.time.seconds);
-                let date=dateFormatter.format(transformDate, 'YYYY.MM.DD, HH:mm');
-                films.push({[doc.id]:{...doc.data().description,time:date}})
+                let transformDateAdding=new Date(1000*doc.data().description.time.seconds);
+                let dateAdding=dateFormatter.format(transformDateAdding, 'YYYY.MM.DD, HH:mm');
+             /*   if(doc.data().description.comments.length){
+                    console.log('нет',doc.data().description.comments.length)
+                    let comments=doc.data().description.comments
+                    for(let i=0; i<comments.length;i++){
+                        let transformCommentsTime=new Date(1000*comments[i].time.seconds);
+                        let dateComments=dateFormatter.format(transformCommentsTime, 'YYYY.MM.DD, HH:mm');
+                        comments[i].time=dateComments
+                    }
+                    films.push({[doc.id]: {...doc.data().description, time: dateAdding, comments:comments}})
+                }else {
+                    films.push({[doc.id]: {...doc.data().description, time: dateAdding}})
+                }*/
+                films.push({[doc.id]: {...doc.data().description, time: dateAdding}})
             });
             dispatch(onFilmsSuccess(films))
         }).catch((error)=> {
@@ -157,5 +186,32 @@ export const filterFilmsAction=(filter, films)=>{
             }
             return arr;
         }
+    }
+}
+export const updateComments=(comments,text,filmId)=>{
+    return dispatch=>{
+        dispatch(onUpdateCommentsRequest())
+        fire.firestore().collection('films').doc(filmId).get().then((snap)=>{
+            if (snap.exists) {
+                return snap.data()
+            }
+        }).then(key=>{
+            fire.firestore().collection('films').doc(filmId).update({
+                description:{
+                    ...key.description,
+                    comments:[
+                        ...key.description.comments,
+                        {
+                            name:fire.auth().currentUser.displayName,
+                            text:text,
+                        }
+                    ]
+                }
+            })
+        }).then(()=>{
+            dispatch(onUpdateCommentsSuccess())
+        }).catch((e)=>{
+            dispatch(onUpdateCommentsError(e))
+        })
     }
 }

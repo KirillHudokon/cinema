@@ -1,5 +1,7 @@
 import fire from "../config/Fire";
 import {resetUserBlockPlaces,getUserBlockPlaces} from './HoleAction'
+const Firebase = require('firebase');
+
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -17,6 +19,10 @@ export const USER_LISTENER_FAIL = 'USER_LISTENER_FAIL'
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST'
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const LOGOUT_FAIL = 'LOGOUT_FAIL'
+
+export const CHANGE_PASSWORD_REQUEST = 'CHANGE_PASSWORD_REQUEST'
+export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS'
+export const CHANGE_PASSWORD_FAIL = 'CHANGE_PASSWORD_FAIL'
 
 
 const onLogRequest = () => ({
@@ -79,6 +85,17 @@ const onUserListenerError=(error)=>({
     payload: error,
 })
 
+const onChangePasswordRequest=()=>({
+    type:CHANGE_PASSWORD_REQUEST,
+})
+const onChangePasswordSuccess=()=>({
+    type:CHANGE_PASSWORD_SUCCESS,
+    payload:'Successful update password'
+})
+const onChangePasswordFail=(error)=>({
+    type:CHANGE_PASSWORD_FAIL,
+    payload:error
+})
 
 
 export const login = (email,password)=>{             //логин
@@ -135,5 +152,27 @@ export const userListener=()=>{            //прослушка
                 dispatch(onUserListenerUnsuccessAuth())
             }
         });
+    }
+}
+
+export const changePassword=(currentPassword,newPassword)=>{
+    return dispatch =>{
+        let user = fire.auth().currentUser;
+        userReAuth(currentPassword).then(()=>{
+            user.updatePassword(newPassword).then(()=>{
+                dispatch(onChangePasswordSuccess())
+            }).catch(error=>{
+                dispatch(onChangePasswordFail(error))
+            })
+        }).catch(error=>{
+            dispatch(onChangePasswordFail(error))
+        })
+
+
+        function userReAuth(){
+            console.log(user.email,currentPassword)
+            let cred=Firebase.auth.EmailAuthProvider.credential(user.email,currentPassword)
+            return user.reauthenticateWithCredential(cred)
+        }
     }
 }

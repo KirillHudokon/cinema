@@ -35,7 +35,7 @@ export function holesReducer(state=initialState, action) {
         case BLOCK_PLACES_SUCCESS:
             return { ...state, error: '' }
         case BLOCK_PLACES_FAIL:
-            return { ...state, error: action.payload }
+            return { ...state, error: action.payload.message }
 
         case BLOCK_QUEUE_SUCCESS:
             return {...state, queue: action.payload}
@@ -48,14 +48,14 @@ export function holesReducer(state=initialState, action) {
         case GET_USER_BLOCK_PLACES_SUCCESS:
             return { ...state, error: '', userBooked:action.payload }
         case GET_USER_BLOCK_PLACES_FAIL:
-            return { ...state, error: action.payload }
+            return { ...state, error: action.payload.message}
 
         case UPDATE_USER_BLOCK_PLACES_REQUEST:
             return { ...state, error: '' }
         case UPDATE_USER_BLOCK_PLACES_SUCCESS:
             return { ...state, error: '', userBooked: action.payload, userQueue:initialState.userQueue }
         case UPDATE_USER_BLOCK_PLACES_FAIL:
-            return { ...state, error: action.payload }
+            return { ...state, error: action.payload.message }
 
 
         case RESET_USER_BLOCK_PLACES:

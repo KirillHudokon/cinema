@@ -1,15 +1,18 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faStar} from "@fortawesome/free-solid-svg-icons";
+import {faEnvelope, faStar,faUser} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
 import Place from "../containers/Holes/Place";
+import Iframe from "react-iframe";
 
 class ViewContent extends Component {
     static defaultProps = {};
 
     static propTypes = {};
-
+    state={
+        commentInput:''
+    }
     renderRate=(rate)=>{
         let stars=[]
         for(let i=1;i<=5;i++){
@@ -69,9 +72,67 @@ class ViewContent extends Component {
             return null
         }
     }
+    renderDetailsButton=(category,path,key)=>{
+        const {fullFilm}=this.props
+        switch (!!fullFilm.length) {
+            case false:
+              return <Link to={`/${category}/${path}`} onClick={()=>this.seeFull(key)} className='viewContainerDetails'>
+                    Подробнее
+                </Link>
+            default:
+                return null
+        }
+    }
+    renderCommentsAreaBlock(film,path){
+        const {fullFilm,updateComments}=this.props
+        switch (!!fullFilm.length) {
+            case true:
+                return <div>
+                    <div className='CommentsTitleAndCounter'>
+                        <div className='blockText'>Отзывы:</div>
+                        <div className='allComments'>Всего: {film.commentsCounter}</div>
+                    </div>
+                    <textarea className='commentArea' placeholder='Написать отзыв'  name='commentInput' onChange={this.changeInputComment}
+                           value={this.state.commentInput}/>
+                    <div className='UpdateCommentsContainer'>
+                        <button onClick={()=>updateComments(film.comments,this.state.commentInput,path)} className='viewContainerUpdateComments'>
+                            Добавить
+                        </button>
+                    </div>
+                </div>
+            default:
+                return null
+        }
+    }
+    changeInputComment=(e)=>{
+        const {changeInputComment} = this.props
+        this.setState({[e.target.name]:e.target.value})
+    }
+    renderComments(film){
+        const {fullFilm}=this.props
+        if (!!fullFilm.length) {
+                return film.comments.length ? film.comments.map(comment=>{
+                    return <div className='commentContainer'>
+               <div className='userIconContainer'>
+                   <FontAwesomeIcon className='userIcon' icon={faUser}/>
+               </div>
+               <div className='comment'>
+                    <div className='commentName'>{comment.name}</div>
+                   <div className='commentText'>
+                       {comment.text}
+                    </div>
+                   <div className='commentTime'>
+                       {comment.time}
+                   </div>
+               </div>
+            </div>
+                }) : <div>Пока еще нет отзывов</div>
+        }else{
+            return null
+        }
+    }
     renderFilms(content){
         const {fullFilm,userQueue,queue,blockQueueAction,userBlockQueueAction,}=this.props
-
         if(!content.length){
             return null
         }else{
@@ -114,18 +175,32 @@ class ViewContent extends Component {
                                 </div>
                             </div>
                         </div>
+                        {fullFilm.length ? <div className='blockContainer'>
+                            <div className='blockText'>Трейлер:</div>
+                            <Iframe url={film.trailer}
+                                                     width="100%"
+                                                     height="400px"
+                                                     id="myId"
+                                                     className="youtube_player"
+                                                     display="initial"
+                                                     position="relative"
+                            />
+                            </div> : null
+                        }
                         <div className='viewContainerPlaces'>
                             {this.renderBlockContainer(film)}
                         </div>
                         <div className='viewContainerExtra'>
                             <div className='viewContainerExDet'>
-                                {!fullFilm.length &&  <Link to={`/${film.category}/${pathOfFilm}`} onClick={()=>this.seeFull(key)} className='viewContainerDetails'>
-                                    Подробнее
-                                </Link> }
+                                {this.renderDetailsButton(film.category,pathOfFilm,key)}
                             </div>
                             <div className='viewContainerDate'>
                                 {film.time}
                             </div>
+                        </div>
+                        <div className='viewContainerCommentsContent'>
+                            {this.renderCommentsAreaBlock(film,pathOfFilm)}
+                            {this.renderComments(film)}
                         </div>
                     </div>
                 })

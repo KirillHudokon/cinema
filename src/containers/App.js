@@ -7,6 +7,7 @@ import {BrowserRouter as Router, Route} from "react-router-dom";
 class App extends React.Component{
     componentDidMount(){
         this.props.userListenerAction()
+
     }
     render(){
         if(!this.props.user.loading) {

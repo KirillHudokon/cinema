@@ -24,13 +24,14 @@ class Form extends React.Component{
     renderFormInf=()=>{
         const {loginAction,signUpAction} = this.props
         const {visible,email,password,name}=this.state
+        const {error,message}=this.props
         switch(true){
             case visible:
                 return <div className='formInf'>
                     <div>
-                        <h2 className='formName'>Войти</h2>
+                        <h2 className='formName'>Please sign in to continue</h2>
                     </div>
-                    <div>
+                    <div className='inputs'>
                         <div className='iconContainer'>
                             <FontAwesomeIcon className='icon' icon={faEnvelope}/>
                             <input type="text" placeholder="E-mail" name='email' onChange={this.handleChanger}
@@ -42,6 +43,7 @@ class Form extends React.Component{
                                    value={password}/>
                         </div>
                     </div>
+                    {!!error ? <div className='error'>{error}</div> : null }
                     <div>
                         <Login email={email} password={password} login={loginAction}/>
                         <button className='formClick' onClick={this.handleClicker}>Нет аккаунта?</button>
@@ -50,9 +52,9 @@ class Form extends React.Component{
             case !visible:
                 return <div className='formInf'>
                     <div>
-                        <h2 className='formName'>Регистрация</h2>
+                        <h2 className='formName'>Please sign in to continue</h2>
                     </div>
-                    <div>
+                    <div className='inputs'>
                         <div className='iconContainer'>
                             <FontAwesomeIcon className='icon' icon={faEnvelope}/>
                             <input type="text" placeholder="E-mail" name='email' onChange={this.handleChanger}
@@ -69,6 +71,7 @@ class Form extends React.Component{
                                    value={password}/>
                         </div>
                     </div>
+                    {!!error ? <div className='error'>{error}</div> : null }
                     <div>
                         <SignUp email={email} password={password} name={name}
                                 signUp={signUpAction}/>
@@ -81,7 +84,7 @@ class Form extends React.Component{
 
         return (
             <div className='formBlock'>
-                <form>
+                <form className='form'>
                     {this.renderFormInf()}
                 </form>
             </div>
