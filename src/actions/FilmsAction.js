@@ -203,7 +203,7 @@ export const updateComments=(comments,text,filmId)=>{
                         ...key.description.comments,
                         {
                             name:fire.auth().currentUser.displayName,
-                            text:text,
+                            text:text.trim(),
                         }
                     ]
                 }

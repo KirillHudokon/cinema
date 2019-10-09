@@ -83,8 +83,17 @@ class ViewContent extends Component {
                 return null
         }
     }
+    renderUpdateCommentButton(film,path){
+        const {updateComments}=this.props
+        return <button
+            onClick={()=>updateComments(film.comments,this.state.commentInput,path)}
+            className='viewContainerUpdateComments'
+            disabled={!this.state.commentInput}>
+            Добавить
+        </button>
+    }
     renderCommentsAreaBlock(film,path){
-        const {fullFilm,updateComments}=this.props
+        const {fullFilm,updateComments, user}=this.props
         switch (!!fullFilm.length) {
             case true:
                 return <div>
@@ -92,13 +101,18 @@ class ViewContent extends Component {
                         <div className='blockText'>Отзывы:</div>
                         <div className='allComments'>Всего: {film.commentsCounter}</div>
                     </div>
-                    <textarea className='commentArea' placeholder='Написать отзыв'  name='commentInput' onChange={this.changeInputComment}
-                           value={this.state.commentInput}/>
+                    {user.cred ? <textarea className='commentArea' placeholder='Написать отзыв' name='commentInput'
+                                  onChange={this.changeInputComment}
+                                  value={this.state.commentInput}/>
+                    : null
+                    }
+                    {user.cred ?
                     <div className='UpdateCommentsContainer'>
-                        <button onClick={()=>updateComments(film.comments,this.state.commentInput,path)} className='viewContainerUpdateComments'>
-                            Добавить
-                        </button>
+                        {this.renderUpdateCommentButton(film,path)}
                     </div>
+                    :null
+                    }
+
                 </div>
             default:
                 return null
@@ -126,7 +140,7 @@ class ViewContent extends Component {
                    </div>
                </div>
             </div>
-                }) : <div>Пока еще нет отзывов</div>
+                }) : <div className='noComments'>Пока еще нет отзывов</div>
         }else{
             return null
         }

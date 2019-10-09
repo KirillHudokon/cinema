@@ -53,7 +53,7 @@ export function userReducer(state=initialState, action) {
         case USER_LISTENER_SUCCESS_AUTH:
             return { ...state, loading:false,error:'', cred: action.payload}
         case USER_LISTENER_UNSUCCESS_AUTH:
-            return { ...state, loading:false,error: action.payload.message}
+            return { ...state, loading:false,error: action.payload}
         case USER_LISTENER_FAIL:
             return { ...state, loading:false, error: action.payload.message }
 

@@ -39,6 +39,21 @@ exports.filmUpdate=functions.firestore.document('/films/{filmsId}').onUpdate( as
         return true
 
     }
+    if(before.description.comments.length!==after.description.comments.length){
+        await db.collection('films').doc(filmsId).get().then((snap)=>{
+            if (snap.exists) {
+                return snap.data()
+            }
+        }).then(key=>{
+            db.collection('films').doc(filmsId).update({
+                description:{
+                    ...key.description,
+                    commentsCounter:key.description.commentsCounter+1
+                }
+            })
+        })
+        return true
+    }
     if(before.description.category===after.description.category){
         return null
     }else{
