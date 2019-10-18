@@ -1,4 +1,6 @@
 import fire from "../config/Fire";
+import React from 'react'
+import {Redirect} from "react-router-dom";
 import {resetUserBlockPlaces,getUserBlockPlaces} from './HoleAction'
 const Firebase = require('firebase');
 

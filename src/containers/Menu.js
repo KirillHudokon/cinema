@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState,useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {userListener,changePassword} from "../actions/UserAction";
 import {connect} from "react-redux";
@@ -15,132 +15,99 @@ import Categories from "../components/Categories";
 import fire from "../config/Fire";
 import ViewContent from "../components/ViewContent";
 import Home from "./Home";
-import {Route} from "react-router-dom";
+import {Route,useRouteMatch,Switch,useLocation} from "react-router-dom";
 import {blockPlaces, blockQueue, updateUserBlockPlaces, userBlockQueue} from "../actions/HoleAction";
 import BookPlaces from "../components/Holes/BookPlaces";
 import UserBookedPlaces from "../components/Holes/UserBookedPlaces";
 import NavMenu from "./NavMenu";
 
-
-class Menu extends Component {
-    static defaultProps = {};
-    state={
-        filter:''
-    }
-    static propTypes = {};
-
-    componentDidMount() {
-        this.props.getCategoriesAction()
-        this.props.getFilmsAction()
-    }
-    sortChange=(sort)=>{
-        const{films,sortFilmAction}=this.props
+function usePageViews() {
+    return useLocation().pathname.split('/').filter(word=>word.length>0)
+}
+function Menu(props) {
+    const [filter] = useState('')
+    console.log(usePageViews())
+    useEffect(() => {
+        console.log('постоянный рендер')
+        props.getCategoriesAction()
+        props.getFilmsAction()
+    },[]);
+    const sortChange=(sort)=>{
+        console.log(sort, 'sort')
+        const{films,sortFilmAction}=props
         sortFilmAction(sort,films.viewContent)
     }
-    filterChange=(filter)=>{
-        const{films, filterFilms}=this.props
+    const filterChange=(filter)=>{
+        console.log(filter,'filter')
+        const{films, filterFilms}=props
         filterFilms(filter,films.viewContent)
     }
 
-    blockPlace=()=>{
-        const {queue, user, userQueue,blockPlacesAction,updateUserBlockPlacesAction}=this.props
+    const blockPlace=()=>{
+        const {queue, user, userQueue,blockPlacesAction,updateUserBlockPlacesAction}=props
         blockPlacesAction(queue)
         if(user.cred){
             updateUserBlockPlacesAction(user.cred.uid,userQueue)
         }
     }
-    render() {
-        const {user,userBooked,userQueue,queue,blockQueueAction,userBlockQueueAction,films,changePasswordAction,updateComments}=this.props
+    const renderMenu=()=>{
+        const {user,userBooked,userQueue,queue,blockQueueAction,userBlockQueueAction,films,changePasswordAction,updateComments,fullFilmAction,activeFilmContentAction}=props
+        const view=<ViewContent
+            sortFilms={films.sort}
+            films={films.viewContent}
+            activeFilm={films.activeFilm}
+            activeFilter={films.activeFilter}
+            fullFilmAction={fullFilmAction}
+            activeFilmContentAction={activeFilmContentAction}
+            fullFilm={films.fullFilm}
+            userQueue={userQueue}
+            queue={queue}
+            blockQueue={blockQueueAction}
+            userBlockQueue={userBlockQueueAction}
+            user={user}
+            updateComments={updateComments}
+        />
         return (
             <div className='menu'>
                 {user.cred && <NavMenu message={user.successfulMessage} error={user.error} places={userBooked} changePassword={changePasswordAction}/>}
                 <div className='leftSideContainer'>
                     <Categories
-                        changer={this.sortChange}
-                        filterChange={this.filterChange}
+                        changer={sortChange}
+                        filterChange={filterChange}
                         categories={films.categories}
                         films={films.viewContent}
                     />
                 </div>
                 <div className='centerContainer'>
                     <div className='filmSelection'>
-                        <Route
-                            path='/'
-                            render={(props)=><ViewContent
-                                {...props}
-                                sortFilms={films.sort}
-                                films={films.viewContent}
-                                activeFilm={films.activeFilm}
-                                activeFilter={films.activeFilter}
-                                fullFilmAction={this.props.fullFilmAction}
-                                activeFilmContentAction={this.props.activeFilmContentAction}
-                                fullFilm={films.fullFilm}
-                                userQueue={userQueue}
-                                queue={queue}
-                                blockQueue={blockQueueAction}
-                                userBlockQueue={userBlockQueueAction}
-                                user={user}
-                                updateComments={updateComments}
-                            />
-                            }
-                            exact={true}
-                        />
-                        <Route
-                            path={`/${films.activeFilter}`}
-                            render={(props)=><ViewContent
-                                {...props}
-                                sortFilms={films.sort}
-                                films={films.viewContent}
-                                activeFilm={films.activeFilm}
-                                activeFilter={films.activeFilter}
-                                fullFilmAction={this.props.fullFilmAction}
-                                activeFilmContentAction={this.props.activeFilmContentAction}
-                                fullFilm={films.fullFilm}
-                                userQueue={userQueue}
-                                queue={queue}
-                                blockQueue={blockQueueAction}
-                                userBlockQueue={userBlockQueueAction}
-                                user={user}
-                                updateComments={updateComments}/>
-                            }
-                            exact={true}
-                        />
-                        <Route
-                            path={`/${films.activeFilter}/${films.activeFilm}`}
-                            render={(props)=><ViewContent
-                                {...props}
-                                sortFilms={films.sort}
-                                films={films.viewContent}
-                                activeFilm={films.activeFilm}
-                                activeFilter={films.activeFilter}
-                                fullFilmAction={this.props.fullFilmAction}
-                                activeFilmContentAction={this.props.activeFilmContentAction}
-                                fullFilm={films.fullFilm}
-                                userQueue={userQueue}
-                                queue={queue}
-                                blockQueue={blockQueueAction}
-                                userBlockQueue={userBlockQueueAction}
-                                user={user}
-                                updateComments={updateComments}/>
-                            }
-                            exact={true}
-                        />
+                        <Switch>
+                            <Route path='/' exact={true}>
+                                {view}
+                            </Route>
+                            <Route path={`/:${films.activeFilter}`} exact={true}>
+                                {view}
+                            </Route>
+                            <Route path={`/:${films.activeFilter}/:${films.activeFilm}`} exact={true}>
+                                {view}
+                            </Route>
+                        </Switch>
                     </div>
                 </div>
                 <div>
                     {user.cred && <BookPlaces
-                       userQueue={userQueue}
-                       queue={queue}
-                       blockQueue={blockQueueAction}
-                       userBlockQueue={userBlockQueueAction}
-                       reservePlaces={userBooked}
-                       blockPlace={this.blockPlace}
-                       filmId={films.activeFilm}
-                   />}
+                        userQueue={userQueue}
+                        queue={queue}
+                        blockQueue={blockQueueAction}
+                        userBlockQueue={userBlockQueueAction}
+                        reservePlaces={userBooked}
+                        blockPlace={blockPlace}
+                        filmId={films.activeFilm}
+                    />}
                 </div>
             </div>
         );
     }
+    return renderMenu()
 }
 
 export const mapStateToProps = store =>({

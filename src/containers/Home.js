@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import LogOut from '../components/Auth/LogOut'
 import {connect} from 'react-redux'
 import {logout,} from "../actions/UserAction";
@@ -7,32 +7,24 @@ import {resetToMainMenu} from "../actions/FilmsAction";
 import AccountImage from "../components/account/AccountImage";
 import Form from './Form'
 import Menu from "./Menu";
-import {Link, Route} from "react-router-dom";
+import {Link, Route,Switch,useLocation, Redirect} from "react-router-dom";
 import NavMenu from "./NavMenu";
+import ViewContent from "../components/ViewContent";
 
+function usePageViews() {
+    return useLocation().pathname
+}
 
-class  Home extends React.Component{
-    state={
-        visible: false,
-    }
-
-    componentDidMount(){
-        const {user, getUserBlockPlacesAction} = this.props
+function Home(props){
+    let localPath=usePageViews()!=='/Auth'? '/Auth' : '/'  // заглушка '/', должно быть равно предыдузему урлу
+    useEffect(() => {
+        const {user, getUserBlockPlacesAction} = props
         if(user.cred) {
             getUserBlockPlacesAction(user.cred.uid)
         }
-    }
-    handleClicker=()=>{
-        if(this.state.visible){
-            document.body.style.overflow = 'auto';
-        }
-        else{
-            document.body.style.overflow = 'hidden';
-        }
-        this.setState({visible:!this.state.visible})
-    }
-    renderHeaderAuthInfo=()=>{
-        const {user,logOutAction}=this.props
+    });
+    const renderHeaderAuthInfo=()=>{
+        const {user,logOutAction}=props
         const {displayName}=user.cred
             return  <div className='prof'>
                      <div className='image'>
@@ -47,30 +39,30 @@ class  Home extends React.Component{
              </div>
 
     }
-    renderHeaderWithOutInfo=()=>{
+    const renderHeaderWithOutInfo=()=>{
         return <div className='prof'>
             <div className='logOutBlock'>
-                <button className='butLogin' onClick={this.handleClicker}>Login</button>
+                <Link to={localPath} className='butLogin'>Login</Link>
             </div>
 
         </div>
     }
-    changeNavMenuState=()=> {
+    const changeNavMenuState=()=>{
         const wrapper = document.getElementById('navMenu');
         wrapper.classList.toggle('is-nav-open')
         const back = document.getElementById('supGrey');
         back.classList.toggle('isActive')
     }
-    render(){
-        const {user,resetToMainMenu}=this.props
+    const renderHeader=()=>{
+        const {user,resetToMainMenu}=props
         if(user.cred){
             document.body.style.overflow = 'auto';
         }
-        let HeaderInfo= user.cred ? this.renderHeaderAuthInfo() : this.renderHeaderWithOutInfo()
+        let HeaderInfo= user.cred ? renderHeaderAuthInfo() : renderHeaderWithOutInfo()
         return (
             <>
                 <div className='supBack'/>
-                <div id='supGrey' onClick={this.changeNavMenuState}/>
+                <div id='supGrey' onClick={changeNavMenuState}/>
                 <header className='header'>
                     <div className='flexContainer'>
                         <div className='logo'>
@@ -78,17 +70,29 @@ class  Home extends React.Component{
                                 Cinema
                             </Link>
                         </div>
-                        { HeaderInfo }
+                        {HeaderInfo}
                     </div>
                 </header>
                 <main className='main'>
-                    <Route path='/' component={Menu}/>
-                    {this.state.visible && !user.cred && <Form message={user.successfulMessage} error={user.error}/>}
+                    <Switch>
+                        <Route path={`/Auth`} exact={true}>
+                            {user.cred && localPath!=='/Auth' ?
+                                <Redirect to='/'/>:
+                                <Form
+                                    message={user.successfulMessage}
+                                    error={user.error}
+                                />
+                            }
+                        </Route>
+                        <Route path='/' component={Menu}/>
+                    </Switch>
                 </main>
-
             </>
-        );
+           )
     }
+
+    return renderHeader()
+
 }
 
 export const mapStateToProps = store =>({
