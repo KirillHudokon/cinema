@@ -4,7 +4,7 @@ import { faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 
 class BookPlaces extends Component {
     deleteBlock=(film,place)=>{
-        const {blockQueue,queue,userBlockQueue,userQueue,filmId}=this.props
+        const {queue,userBlockQueue,userQueue,filmId}=this.props
         userBlockQueue(userQueue,film,place-1,'unlocked','user')
         userBlockQueue(queue,filmId,place-1,'unlocked','films')
     }

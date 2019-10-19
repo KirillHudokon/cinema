@@ -44,7 +44,7 @@ export function userReducer(state=initialState, action) {
         case LOGOUT_REQUEST:
             return { ...state,  error: '' }
         case LOGOUT_SUCCESS:
-            return { ...state,  cred: action.payload, error: '' }
+            return { ...state,  cred: action.payload, error: '', successfulMessage:'' }
         case LOGOUT_FAIL:
             return { ...state,  error: action.payload.message }
 

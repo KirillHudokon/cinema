@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBars, faKey} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome/index";
+import {faBars, faKey} from "@fortawesome/free-solid-svg-icons/index";
 
 class NavMenu extends Component {
     state={

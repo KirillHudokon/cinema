@@ -2,7 +2,7 @@ import React from 'react';
 import Home from './Home'
 import {connect} from 'react-redux'
 import {userListener} from "../actions/UserAction";
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router} from "react-router-dom";
 
 class App extends React.Component{
     componentDidMount(){

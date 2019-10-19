@@ -8,8 +8,6 @@ import AccountImage from "../components/account/AccountImage";
 import Form from './Form'
 import Menu from "./Menu";
 import {Link, Route,Switch,useLocation, Redirect} from "react-router-dom";
-import NavMenu from "./NavMenu";
-import ViewContent from "../components/ViewContent";
 
 function usePageViews() {
     return useLocation().pathname

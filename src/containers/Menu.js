@@ -1,6 +1,5 @@
-import React, {useState,useEffect} from 'react';
-import PropTypes from 'prop-types';
-import {userListener,changePassword} from "../actions/UserAction";
+import React, {useEffect} from 'react';
+import {changePassword} from "../actions/UserAction";
 import {connect} from "react-redux";
 import {
     getCategoriesAction,
@@ -12,28 +11,19 @@ import {
     updateComments
 } from "../actions/FilmsAction";
 import Categories from "../components/Categories";
-import fire from "../config/Fire";
 import ViewContent from "../components/ViewContent";
-import Home from "./Home";
-import {Route,useRouteMatch,Switch,useLocation} from "react-router-dom";
+import {Route,Switch} from "react-router-dom";
 import {blockPlaces, blockQueue, updateUserBlockPlaces, userBlockQueue} from "../actions/HoleAction";
 import BookPlaces from "../components/Holes/BookPlaces";
-import UserBookedPlaces from "../components/Holes/UserBookedPlaces";
-import NavMenu from "./NavMenu";
+import NavMenu from "../components/NavMenu";
 
-function usePageViews() {
-    return useLocation().pathname.split('/').filter(word=>word.length>0)
-}
+
 function Menu(props) {
-    const [filter] = useState('')
-    console.log(usePageViews())
     useEffect(() => {
-        console.log('постоянный рендер')
         props.getCategoriesAction()
         props.getFilmsAction()
     },[]);
     const sortChange=(sort)=>{
-        console.log(sort, 'sort')
         const{films,sortFilmAction}=props
         sortFilmAction(sort,films.viewContent)
     }
@@ -81,13 +71,13 @@ function Menu(props) {
                 <div className='centerContainer'>
                     <div className='filmSelection'>
                         <Switch>
-                            <Route path='/' exact={true}>
+                            <Route path={`/:${films.activeFilter}/:${films.activeFilm}`} exact={true}>
                                 {view}
                             </Route>
                             <Route path={`/:${films.activeFilter}`} exact={true}>
                                 {view}
                             </Route>
-                            <Route path={`/:${films.activeFilter}/:${films.activeFilm}`} exact={true}>
+                            <Route path='/' exact={true}>
                                 {view}
                             </Route>
                         </Switch>

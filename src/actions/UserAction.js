@@ -1,6 +1,4 @@
 import fire from "../config/Fire";
-import React from 'react'
-import {Redirect} from "react-router-dom";
 import {resetUserBlockPlaces,getUserBlockPlaces} from './HoleAction'
 const Firebase = require('firebase');
 
@@ -146,19 +144,24 @@ export const logout=()=>{            //логаут
 }
 export const userListener=()=>{            //прослушка
     return dispatch =>{
-        dispatch(onUserListenerRequest())
-        fire.auth().onAuthStateChanged(user=> {
-            if (user) {
-              dispatch(onUserListenerSuccessAuth(user))
-            } else {
-                dispatch(onUserListenerUnsuccessAuth())
-            }
-        });
+        try {
+            dispatch(onUserListenerRequest())
+            fire.auth().onAuthStateChanged(user => {
+                if (user) {
+                    dispatch(onUserListenerSuccessAuth(user))
+                } else {
+                    dispatch(onUserListenerUnsuccessAuth())
+                }
+            })
+        }catch (e) {
+            dispatch(onUserListenerError(e))
+        }
     }
 }
 
 export const changePassword=(currentPassword,newPassword)=>{
     return dispatch =>{
+        dispatch(onChangePasswordRequest())
         let user = fire.auth().currentUser;
         userReAuth(currentPassword).then(()=>{
             user.updatePassword(newPassword).then(()=>{
@@ -172,7 +175,6 @@ export const changePassword=(currentPassword,newPassword)=>{
 
 
         function userReAuth(){
-            console.log(user.email,currentPassword)
             let cred=Firebase.auth.EmailAuthProvider.credential(user.email,currentPassword)
             return user.reauthenticateWithCredential(cred)
         }

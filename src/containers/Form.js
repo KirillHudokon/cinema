@@ -24,7 +24,7 @@ class Form extends React.Component{
     renderFormInf=()=>{
         const {loginAction,signUpAction} = this.props
         const {visible,email,password,name}=this.state
-        const {error,message}=this.props
+        const {error}=this.props
         switch(true){
             case visible:
                 return <div className='formInf'>
@@ -78,6 +78,8 @@ class Form extends React.Component{
                         <button className='formClick' onClick={this.handleClicker}>Есть аккаунт?</button>
                     </div>
                 </div>
+            default:
+                return null
         }
     }
     render(){

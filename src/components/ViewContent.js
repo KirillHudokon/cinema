@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEnvelope, faStar,faUser} from "@fortawesome/free-solid-svg-icons";
+import { faStar,faUser} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
-import Place from "../containers/Holes/Place";
+import Place from "./Holes/Place";
 import Iframe from "react-iframe";
 
 class ViewContent extends Component {
@@ -93,7 +92,7 @@ class ViewContent extends Component {
         </button>
     }
     renderCommentsAreaBlock(film,path){
-        const {fullFilm,updateComments, user}=this.props
+        const {fullFilm, user}=this.props
         switch (!!fullFilm.length) {
             case true:
                 return <div>
@@ -119,7 +118,6 @@ class ViewContent extends Component {
         }
     }
     changeInputComment=(e)=>{
-        const {changeInputComment} = this.props
         this.setState({[e.target.name]:e.target.value})
     }
     renderComments(film){
@@ -146,7 +144,7 @@ class ViewContent extends Component {
         }
     }
     renderFilms(content){
-        const {fullFilm,userQueue,queue,blockQueueAction,userBlockQueueAction,}=this.props
+        const {fullFilm}=this.props
         if(!content.length){
             return null
         }else{
@@ -238,11 +236,4 @@ class ViewContent extends Component {
         );
     }
 }
-{/*<CinemaLines
-                                userQueue={userQueue}
-                                queue={queue}
-                                blockQueue={blockQueueAction}
-                                film={film.name}
-                                userBlockQueue={userBlockQueueAction}
-                            />*/}
 export default ViewContent;

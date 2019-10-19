@@ -1,7 +1,6 @@
 import fire from "../config/Fire";
 
 import dateFormatter from 'date-and-time';
-import {Link} from "react-router-dom";
 
 export const GET_CATEGORIES_REQUEST = 'GET_CATEGORIES_REQUEST'
 export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS'
@@ -112,18 +111,6 @@ export const getFilmsAction=()=>{
             querySnapshot.forEach((doc) => {
                 let transformDateAdding=new Date(1000*doc.data().description.time.seconds);
                 let dateAdding=dateFormatter.format(transformDateAdding, 'YYYY.MM.DD, HH:mm');
-             /*   if(doc.data().description.comments.length){
-                    console.log('нет',doc.data().description.comments.length)
-                    let comments=doc.data().description.comments
-                    for(let i=0; i<comments.length;i++){
-                        let transformCommentsTime=new Date(1000*comments[i].time.seconds);
-                        let dateComments=dateFormatter.format(transformCommentsTime, 'YYYY.MM.DD, HH:mm');
-                        comments[i].time=dateComments
-                    }
-                    films.push({[doc.id]: {...doc.data().description, time: dateAdding, comments:comments}})
-                }else {
-                    films.push({[doc.id]: {...doc.data().description, time: dateAdding}})
-                }*/
                 films.push({[doc.id]: {...doc.data().description, time: dateAdding}})
             });
             dispatch(onFilmsSuccess(films))
